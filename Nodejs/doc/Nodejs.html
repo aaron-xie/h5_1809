@@ -1073,19 +1073,84 @@ body .markdown-body
 <li><a href="#_6">导出模块</a></li>
 <li><a href="#require">引入模块require()</a></li>
 <li><a href="#_7">原生模块</a></li>
-<li><a href="#_8">第三方的模块</a></li>
 </ul>
 </li>
-<li><a href="#_9">路由</a><ul>
-<li><a href="#_10">应用场景</a></li>
+<li><a href="#_8">路由</a><ul>
+<li><a href="#_9">应用场景</a></li>
 </ul>
 </li>
-<li><a href="#async">Async</a><ul>
-<li><a href="#asyncawait">Async/Await</a></li>
-<li><a href="#_11">对比使用</a></li>
-<li><a href="#_12">捕捉错误</a></li>
-<li><a href="#_13">在循环中使用</a></li>
-<li><a href="#_14">爬虫中使用</a></li>
+</ul>
+</li>
+<li><a href="#const-http-requirehttp-const-url-requireurl-const-qs-requirequerystring-const-util-requireutil-httpcreateserverrequest-response-url-let-urlobj-urlparserequesturl-true-let-pathname-urlobjpathname-let-method-requestmethodtouppercase-let-params-urlobjquery-post-ifmethod-post-let-postdata-requestondata-_data-postdata-_data-requestonend-postdata-qsparsepostdata-let-result-switchpathname-case-login-result-status-true-break-case-register-result-status-true-break-default-result-status-false-message-break-responseendutilinspectresult-get-else-ifmethod-get-let-result-switchpathname-case-students-result-status-true-data-params-break-case-orders-result-status-true-data-params-break-default-result-status-false-message-params-break-responseendutilinspectresult-listen88"><div class="codehilite"><pre>    <span class="kr">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">qs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;querystring&#39;</span><span class="p">);</span>
+    <span class="kr">const</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
+
+    <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">((</span><span class="nx">request</span><span class="p">,</span> <span class="nx">response</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+        <span class="c1">// 处理url地址</span>
+        <span class="kd">let</span> <span class="nx">urlObj</span> <span class="o">=</span> <span class="nx">url</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">request</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+
+        <span class="c1">// 获取访问路径</span>
+        <span class="kd">let</span> <span class="nx">pathname</span> <span class="o">=</span> <span class="nx">urlObj</span><span class="p">.</span><span class="nx">pathname</span><span class="p">;</span>
+
+        <span class="c1">// 获取请求类型</span>
+        <span class="kd">let</span> <span class="nx">method</span> <span class="o">=</span> <span class="nx">request</span><span class="p">.</span><span class="nx">method</span><span class="p">.</span><span class="nx">toUpperCase</span><span class="p">();</span>
+
+        <span class="c1">// 获取参数</span>
+        <span class="kd">let</span> <span class="nx">params</span> <span class="o">=</span> <span class="nx">urlObj</span><span class="p">.</span><span class="nx">query</span><span class="p">;</span>
+
+        <span class="c1">// POST请求处理方式</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">method</span> <span class="o">==</span> <span class="s1">&#39;POST&#39;</span><span class="p">){</span>
+            <span class="kd">let</span> <span class="nx">postData</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">_data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="nx">postData</span> <span class="o">+=</span> <span class="nx">_data</span><span class="p">;</span>
+            <span class="p">})</span>
+            <span class="nx">request</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;end&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+                <span class="nx">postData</span> <span class="o">=</span> <span class="nx">qs</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">postData</span><span class="p">);</span>
+                <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{};</span>
+                <span class="k">switch</span><span class="p">(</span><span class="nx">pathname</span><span class="p">){</span>
+                    <span class="k">case</span> <span class="s1">&#39;/login&#39;</span><span class="o">:</span>
+                        <span class="c1">//连接数据库，实现登陆逻辑</span>
+                        <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span><span class="nx">status</span><span class="o">:</span> <span class="kc">true</span><span class="p">};</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">case</span> <span class="s1">&#39;/register&#39;</span><span class="o">:</span>
+                        <span class="c1">//连接数据库，实现注册逻辑</span>
+                        <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span><span class="nx">status</span><span class="o">:</span> <span class="kc">true</span><span class="p">};</span>
+                        <span class="k">break</span><span class="p">;</span>
+                    <span class="k">default</span> <span class="o">:</span>
+                        <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span><span class="nx">status</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;没有对应的请求&#39;</span><span class="p">};</span>
+                        <span class="k">break</span><span class="p">;</span>                  
+                <span class="p">}</span>
+                <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+            <span class="p">})</span>
+        <span class="p">}</span> 
+
+        <span class="c1">// get请求处理方式</span>
+        <span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nx">method</span> <span class="o">===</span> <span class="s1">&#39;GET&#39;</span><span class="p">){</span>
+            <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{};</span>
+            <span class="k">switch</span><span class="p">(</span><span class="nx">pathname</span><span class="p">){</span>
+                <span class="k">case</span> <span class="s1">&#39;/students&#39;</span><span class="o">:</span>
+                    <span class="c1">//连接数据库，获取学生信息</span>
+                    <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span><span class="nx">status</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="p">[],</span> <span class="nx">params</span><span class="p">};</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">case</span> <span class="s1">&#39;/orders&#39;</span><span class="o">:</span>
+                    <span class="c1">//连接数据库，获取订单信息</span>
+                    <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span><span class="nx">status</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="p">[],</span> <span class="nx">params</span><span class="p">};</span>
+                    <span class="k">break</span><span class="p">;</span>
+                <span class="k">default</span> <span class="o">:</span>
+                    <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span><span class="nx">status</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="s1">&#39;没有对应的请求&#39;</span><span class="p">,</span> <span class="nx">params</span><span class="p">};</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">88</span><span class="p">);</span>
+</pre></div></a><ul>
+<li><a href="#async">Async异步</a><ul>
+<li><a href="#asyncawait">async/await</a></li>
+<li><a href="#_10">对比使用</a></li>
+<li><a href="#_11">捕捉错误</a></li>
+<li><a href="#_12">在循环中使用</a></li>
+<li><a href="#_13">爬虫中使用</a></li>
 </ul>
 </li>
 </ul>
@@ -1322,7 +1387,7 @@ body .markdown-body
 <li>
 <p>url.format(params)：对象转字符串，url.parse的反过程</p>
 </li>
-<li>url.resolve(): 多个 url 拼接处理
+<li>url.resolve(): 以一种 Web 浏览器解析超链接的方式把一个目标 URL 解析成相对于一个基础 URL
 <div class="codehilite"><pre>    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">);</span>
     <span class="nx">url</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;http://laoxie.com/&#39;</span><span class="p">,</span> <span class="s1">&#39;/one&#39;</span><span class="p">)</span><span class="c1">// &#39;http://laoxie.com/one&#39;</span>
 </pre></div></li>
@@ -1358,9 +1423,19 @@ body .markdown-body
 <p>用于处理文件与目录的路径</p>
 </blockquote>
 <ul>
-<li>basename(path) 返回 path 的最后一部分</li>
-<li>dirname(path) 返回 path 的目录名</li>
-<li>extname(path) 返回 path 的扩展名，即从 path 的最后一部分中的最后一个 .（句号）字符到字符串结束</li>
+<li>path.parse(path) 返回一个对象，其中对象的属性表示 path 的元素<ul>
+<li>dir </li>
+<li>root</li>
+<li>base</li>
+<li>name</li>
+<li>ext</li>
+</ul>
+</li>
+<li>path.basename(path) 返回 path 的最后一部分（同path.parse()中的base）</li>
+<li>path.dirname(path) 返回 path 的目录名（同path.parse()中的dir）</li>
+<li>path.extname(path) 返回 path 的扩展名，（同path.parse()中的ext）</li>
+<li>path.join([&hellip;paths]) 使用平台特定的分隔符把所有 path 片段连接到一起，并规范化生成的路径</li>
+<li>path.normalize(path) 规范化指定的 path，并处理 &lsquo;..&rsquo; 和 &lsquo;.&rsquo; 片段</li>
 </ul>
 </li>
 <li>
@@ -1510,7 +1585,7 @@ body .markdown-body
 </ul>
 </li>
 <li>
-<p>stream概念</p>
+<p>stream流</p>
 <blockquote>
 <p>Stream 是一个抽象接口，往往用于打开大型的文本文件，创建一个读取操作的数据流。Node 中有很多对象实现了这个接口。如http 服务器发起请求的request 对象就是一个 Stream。</p>
 </blockquote>
@@ -1597,7 +1672,6 @@ body .markdown-body
     <span class="kd">var</span> <span class="nx">readerStream</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;input.txt&#39;</span><span class="p">);</span>
 
     <span class="c1">// 创建一个可写流 </span>
-    <span class="c1">// {&#39;flags&#39;: &#39;a&#39;}//追加文本</span>
     <span class="kd">var</span> <span class="nx">writerStream</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;output.txt&#39;</span><span class="p">);</span>
 
     <span class="c1">// 管道读写操作</span>
@@ -1641,192 +1715,11 @@ body .markdown-body
 </ul>
 </li>
 </ul>
-<hr />
-<p>【案例】</p>
-<ul>
-<li>利用原生模块搭建静态资源服务器</li>
-<li>制作本地相册</li>
-</ul>
-<p>【练习】</p>
-<ul>
-<li>实现文件的上传、在线压缩与解压</li>
-</ul>
-<h4 id="_8">第三方的模块<a class="headerlink" href="#_8" title="Permanent link"></a></h4>
-<ul>
-<li>
-<p>Request</p>
-<blockquote>
-<p>可用于发起 http 或 https 请求，可理解成服务端的 ajax 请求。可用于简单的服务器代理，用法和 ajax 类似。</p>
-</blockquote>
-<ul>
-<li>
-<p>安装： <code>npm install request --save</code></p>
-</li>
-<li>
-<p>GET 请求
-<div class="codehilite"><pre><span class="kr">const</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
-
-<span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;https://cnodejs.org/api/v1/topics?page=1&amp;limit=10&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">)</span>
-<span class="p">});</span>
-<span class="c1">//or</span>
-<span class="nx">request</span><span class="p">(</span><span class="s1">&#39;https://cnodejs.org/api/v1/topics?page=1&amp;limit=10&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">body</span><span class="p">)</span>
-<span class="p">});</span>
-</pre></div></p>
-<ul>
-<li>参数设置
-<div class="codehilite"><pre><span class="c1">//封装成单独的模块</span>
-<span class="kr">const</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
-
-<span class="nx">exports</span><span class="p">.</span><span class="nx">get</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
-    <span class="kd">var</span> <span class="nx">httpOptions</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="nx">url</span><span class="o">:</span> <span class="nx">url</span><span class="p">,</span>
-        <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;get&#39;</span><span class="p">,</span>
-        <span class="nx">timeout</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeout</span> <span class="o">||</span> <span class="mi">10000</span><span class="p">,</span>
-        <span class="nx">headers</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">headers</span> <span class="o">||</span> <span class="nx">default_post_headers</span><span class="p">,</span>
-        <span class="nx">proxy</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">proxy</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="nx">agentOptions</span><span class="o">:</span> <span class="nx">agentOptions</span><span class="p">,</span>
-        <span class="nx">params</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">params</span> <span class="o">||</span> <span class="p">{}</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">){</span>
-        <span class="nx">httpOptions</span><span class="p">.</span><span class="nx">headers</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;User-Agent&#39;</span><span class="o">:</span> <span class="nx">userAgents</span><span class="p">[</span><span class="nx">options</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">],</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">try</span><span class="p">{</span>
-        <span class="nx">request</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">httpOptions</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">err</span><span class="p">})</span>
-            <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="nx">options</span><span class="p">.</span><span class="nx">callback</span><span class="p">({</span><span class="nx">status</span><span class="o">:</span> <span class="nx">res</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">==</span> <span class="mi">200</span><span class="p">,</span> <span class="nx">error</span><span class="o">:</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="nx">body</span><span class="p">})</span>
-            <span class="p">}</span>
-        <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">catch</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
-        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;http error&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div></li>
-</ul>
-</li>
-<li>
-<p>POST 请求</p>
-<blockquote>
-<p>request支持application/x-www-form-urlencoded和multipart/form-data实现表单上传。</p>
-</blockquote>
-<ul>
-<li>
-<p>application/x-www-form-urlencoded (URL-Encoded Forms)
-<div class="codehilite"><pre>    <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://service.com/upload&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">form</span><span class="o">:</span><span class="p">{</span><span class="nx">key</span><span class="o">:</span><span class="s1">&#39;value&#39;</span><span class="p">}})</span>
-    <span class="c1">// or</span>
-    <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">(</span><span class="s1">&#39;http://service.com/upload&#39;</span><span class="p">).</span><span class="nx">form</span><span class="p">({</span><span class="nx">key</span><span class="o">:</span><span class="s1">&#39;value&#39;</span><span class="p">})</span>
-    <span class="c1">// or</span>
-    <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="nx">url</span><span class="o">:</span><span class="s1">&#39;http://service.com/upload&#39;</span><span class="p">,</span> <span class="nx">form</span><span class="o">:</span> <span class="p">{</span><span class="nx">key</span><span class="o">:</span><span class="s1">&#39;value&#39;</span><span class="p">}},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span><span class="nx">httpResponse</span><span class="p">,</span><span class="nx">body</span><span class="p">){</span> <span class="cm">/* ... */</span> <span class="p">})</span>
-</pre></div></p>
-</li>
-<li>
-<p>multipart/form-data (Multipart Form Uploads)
-<div class="codehilite"><pre>    <span class="kd">var</span> <span class="nx">formData</span> <span class="o">=</span> <span class="p">{</span>
-      <span class="c1">// Pass a simple key-value pair</span>
-      <span class="nx">my_field</span><span class="o">:</span> <span class="s1">&#39;my_value&#39;</span><span class="p">,</span>
-      <span class="c1">// Pass data via Buffers</span>
-      <span class="nx">my_buffer</span><span class="o">:</span> <span class="k">new</span> <span class="nx">Buffer</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]),</span>
-      <span class="c1">// Pass data via Streams</span>
-      <span class="nx">my_file</span><span class="o">:</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/unicycle.jpg&#39;</span><span class="p">),</span>
-      <span class="c1">// Pass multiple values /w an Array</span>
-      <span class="nx">attachments</span><span class="o">:</span> <span class="p">[</span>
-        <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/attachment1.jpg&#39;</span><span class="p">),</span>
-        <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s1">&#39;/attachment2.jpg&#39;</span><span class="p">)</span>
-      <span class="p">],</span>
-      <span class="c1">// Pass optional meta-data with an &#39;options&#39; object with style: {value: DATA, options: OPTIONS}</span>
-      <span class="c1">// Use case: for some types of streams, you&#39;ll need to provide &quot;file&quot;-related information manually.</span>
-      <span class="c1">// See the `form-data` README for more information about options: https://github.com/form-data/form-data</span>
-      <span class="nx">custom_file</span><span class="o">:</span> <span class="p">{</span>
-        <span class="nx">value</span><span class="o">:</span>  <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;/dev/urandom&#39;</span><span class="p">),</span>
-        <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
-          <span class="nx">filename</span><span class="o">:</span> <span class="s1">&#39;topsecret.jpg&#39;</span><span class="p">,</span>
-          <span class="nx">contentType</span><span class="o">:</span> <span class="s1">&#39;image/jpeg&#39;</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-    <span class="p">};</span>
-    <span class="nx">request</span><span class="p">.</span><span class="nx">post</span><span class="p">({</span><span class="nx">url</span><span class="o">:</span><span class="s1">&#39;http://service.com/upload&#39;</span><span class="p">,</span> <span class="nx">formData</span><span class="o">:</span> <span class="nx">formData</span><span class="p">},</span> <span class="kd">function</span> <span class="nx">optionalCallback</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">httpResponse</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;upload failed:&#39;</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Upload successful!  Server responded with:&#39;</span><span class="p">,</span> <span class="nx">body</span><span class="p">);</span>
-    <span class="p">});</span>
-</pre></div></p>
-</li>
-<li>
-<p>常用多参数设置
-<div class="codehilite"><pre>    <span class="nx">exports</span><span class="p">.</span><span class="nx">form_post</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="nx">postdata</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c1">// console.log(`${moment().format()} HttpFormPost: ${url}`)</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-            <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
-            <span class="kd">var</span> <span class="nx">httpOptions</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="nx">url</span><span class="o">:</span> <span class="nx">url</span><span class="p">,</span>
-                <span class="nx">form</span><span class="o">:</span> <span class="nx">postdata</span><span class="p">,</span>
-                <span class="nx">method</span><span class="o">:</span> <span class="s1">&#39;post&#39;</span><span class="p">,</span>
-                <span class="nx">timeout</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">timeout</span> <span class="o">||</span> <span class="mi">3000</span><span class="p">,</span>
-                <span class="nx">headers</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">headers</span> <span class="o">||</span> <span class="nx">default_post_headers</span><span class="p">,</span>
-                <span class="nx">proxy</span><span class="o">:</span> <span class="nx">options</span><span class="p">.</span><span class="nx">proxy</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
-                <span class="nx">agentOptions</span><span class="o">:</span> <span class="nx">agentOptions</span>
-            <span class="p">};</span>
-            <span class="nx">request</span><span class="p">(</span><span class="nx">httpOptions</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="nx">reject</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
-                <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">statusCode</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span> <span class="p">{</span>
-                        <span class="nx">resolve</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
-                    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                        <span class="nx">reject</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">statusCode</span><span class="p">);</span>
-                    <span class="p">}</span>
-                <span class="p">}</span>
-            <span class="p">}).</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="nx">logger</span><span class="p">.</span><span class="nx">error</span><span class="p">);</span>
-        <span class="p">});</span>
-    <span class="p">};</span>
-</pre></div></p>
-</li>
-</ul>
-</li>
-<li>
-<p>流
-<div class="codehilite"><pre>    <span class="nx">request</span><span class="p">(</span><span class="s1">&#39;http://img.zcool.cn/community/018d4e554967920000019ae9df1533.jpg@900w_1l_2o_100sh.jpg&#39;</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;test.png&#39;</span><span class="p">))</span>
-    <span class="nx">request</span><span class="p">(</span><span class="s1">&#39;https://cnodejs.org/api/v1/topics?page=1&amp;limit=10&#39;</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="s1">&#39;cnodejs.json&#39;</span><span class="p">));</span>
-</pre></div></p>
-<ul>
-<li>爬虫(爬取图片到本地)<blockquote>
-<p>又被称为网页蜘蛛，网络机器人，主要是在服务端去请求外部的 url 拿到对方的资源，然后进行分析并抓取有效数据。</p>
-</blockquote>
-</li>
-</ul>
-<div class="codehilite"><pre>    <span class="c1">//这里用 request 实现一个简单的图片抓取的小爬虫</span>
-
-    <span class="kr">const</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
-    <span class="kr">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
-    <span class="kr">const</span> <span class="nx">cheerio</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cheerio&#39;</span><span class="p">);</span>
-
-    <span class="nx">request</span><span class="p">(</span><span class="s1">&#39;http://www.lanrentuku.com/&#39;</span><span class="p">,</span> <span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="nx">response</span><span class="p">,</span> <span class="nx">body</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="kd">let</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">cheerio</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;img&#39;</span><span class="p">,</span> <span class="s1">&#39;.in-ne&#39;</span><span class="p">).</span><span class="nx">each</span><span class="p">((</span><span class="nx">i</span><span class="p">,</span> <span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-            <span class="kd">let</span> <span class="nx">src</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">e</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;src&#39;</span><span class="p">);</span>
-            <span class="kd">let</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">src</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">src</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="nx">request</span><span class="p">(</span><span class="nx">src</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">createWriteStream</span><span class="p">(</span><span class="nx">name</span><span class="p">))</span>
-        <span class="p">})</span>
-    <span class="p">});</span>
-</pre></div>
-
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="_9">路由<a class="headerlink" href="#_9" title="Permanent link"></a></h3>
+<h3 id="_8">路由<a class="headerlink" href="#_8" title="Permanent link"></a></h3>
 <blockquote>
 <p>在 BS 架构中，路由的概念都是一样的，可理解为根据客户端请求的 URL 映射到不同的方法实现，更多的一般都是针对 URL 中的路径，或者是参数，又或者是锚点这些信息进行映射。</p>
 </blockquote>
-<h4 id="_10">应用场景<a class="headerlink" href="#_10" title="Permanent link"></a></h4>
+<h4 id="_9">应用场景<a class="headerlink" href="#_9" title="Permanent link"></a></h4>
 <ul>
 <li>注册一个账户<ul>
 <li>请求类型：post</li>
@@ -1853,7 +1746,7 @@ body .markdown-body
 </ul>
 </li>
 </ul>
-<div class="codehilite"><pre>    <span class="kr">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">)</span>
+<h2 id="const-http-requirehttp-const-url-requireurl-const-qs-requirequerystring-const-util-requireutil-httpcreateserverrequest-response-url-let-urlobj-urlparserequesturl-true-let-pathname-urlobjpathname-let-method-requestmethodtouppercase-let-params-urlobjquery-post-ifmethod-post-let-postdata-requestondata-_data-postdata-_data-requestonend-postdata-qsparsepostdata-let-result-switchpathname-case-login-result-status-true-break-case-register-result-status-true-break-default-result-status-false-message-break-responseendutilinspectresult-get-else-ifmethod-get-let-result-switchpathname-case-students-result-status-true-data-params-break-case-orders-result-status-true-data-params-break-default-result-status-false-message-params-break-responseendutilinspectresult-listen88"><div class="codehilite"><pre>    <span class="kr">const</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">)</span>
     <span class="kr">const</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">)</span>
     <span class="kr">const</span> <span class="nx">qs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;querystring&#39;</span><span class="p">);</span>
     <span class="kr">const</span> <span class="nx">util</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;util&#39;</span><span class="p">);</span>
@@ -1916,15 +1809,24 @@ body .markdown-body
             <span class="nx">response</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">util</span><span class="p">.</span><span class="nx">inspect</span><span class="p">(</span><span class="nx">result</span><span class="p">))</span>
         <span class="p">}</span>
     <span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">88</span><span class="p">);</span>
-</pre></div>
-
-<h3 id="async">Async<a class="headerlink" href="#async" title="Permanent link"></a></h3>
+</pre></div><a class="headerlink" href="#const-http-requirehttp-const-url-requireurl-const-qs-requirequerystring-const-util-requireutil-httpcreateserverrequest-response-url-let-urlobj-urlparserequesturl-true-let-pathname-urlobjpathname-let-method-requestmethodtouppercase-let-params-urlobjquery-post-ifmethod-post-let-postdata-requestondata-_data-postdata-_data-requestonend-postdata-qsparsepostdata-let-result-switchpathname-case-login-result-status-true-break-case-register-result-status-true-break-default-result-status-false-message-break-responseendutilinspectresult-get-else-ifmethod-get-let-result-switchpathname-case-students-result-status-true-data-params-break-case-orders-result-status-true-data-params-break-default-result-status-false-message-params-break-responseendutilinspectresult-listen88" title="Permanent link"></a></h2>
+<p>【案例】</p>
+<ul>
+<li>利用原生模块搭建静态资源服务器</li>
+<li>制作本地相册</li>
+<li>编写数据接口，实现注册登录获取用户信息等功能</li>
+</ul>
+<p>【练习】</p>
+<ul>
+<li>实现文件的上传、在线压缩与解压</li>
+</ul>
+<h3 id="async">Async异步<a class="headerlink" href="#async" title="Permanent link"></a></h3>
 <blockquote>
 <p>Node.js 是一个异步机制的服务端语言，在大量异步的场景下需要按顺序执行，那正常做法就是回调嵌套回调，回调嵌套太多的问题被称之回调地狱。</p>
 </blockquote>
-<p><strong>Node.js 为解决这一问题推出了异步控制流 ———— Async</strong></p>
-<h4 id="asyncawait">Async/Await<a class="headerlink" href="#asyncawait" title="Permanent link"></a></h4>
-<p>Async/Await 就 ES7 的方案，结合 ES6 的 Promise 对象，使用前请确定 Node.js 的版本是 7.6 以上。主要益处是可以避免回调地狱（callback hell），且以最接近同步代码的方式编写异步代码。</p>
+<p><strong>为解决这一问题推出了异步控制流 ———— async</strong></p>
+<h4 id="asyncawait">async/await<a class="headerlink" href="#asyncawait" title="Permanent link"></a></h4>
+<p>async/await 就 ES7 的方案，结合 ES6 的 Promise 对象，使用前请确定 Node.js 的版本是 7.6 以上。主要益处是可以避免回调地狱（callback hell），且以最接近同步代码的方式编写异步代码。</p>
 <ul>
 <li>基本规则<ul>
 <li>async 表示这是一个async函数，await只能用在这个函数里面。</li>
@@ -1932,7 +1834,7 @@ body .markdown-body
 </ul>
 </li>
 </ul>
-<h4 id="_11">对比使用<a class="headerlink" href="#_11" title="Permanent link"></a></h4>
+<h4 id="_10">对比使用<a class="headerlink" href="#_10" title="Permanent link"></a></h4>
 <blockquote>
 <p>场景：3秒后返回一个值</p>
 </blockquote>
@@ -1974,7 +1876,7 @@ body .markdown-body
 </pre></div></p>
 </li>
 <li>
-<p>Async/Await 时代
+<p>async/await 时代
 <div class="codehilite"><pre>    <span class="kd">let</span> <span class="nx">sleep</span> <span class="o">=</span> <span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -1992,7 +1894,7 @@ body .markdown-body
 </pre></div></p>
 </li>
 </ul>
-<h4 id="_12">捕捉错误<a class="headerlink" href="#_12" title="Permanent link"></a></h4>
+<h4 id="_11">捕捉错误<a class="headerlink" href="#_11" title="Permanent link"></a></h4>
 <div class="codehilite"><pre>    <span class="kd">let</span> <span class="nx">sleep</span> <span class="o">=</span> <span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
             <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
@@ -2013,16 +1915,8 @@ body .markdown-body
     <span class="nx">start</span><span class="p">();</span>
 </pre></div>
 
-<h4 id="_13">在循环中使用<a class="headerlink" href="#_13" title="Permanent link"></a></h4>
-<div class="codehilite"><pre>    <span class="kd">let</span> <span class="nx">sleep</span> <span class="o">=</span> <span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-            <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
-                <span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;ok&#39;</span><span class="p">)</span> <span class="p">;</span>
-            <span class="p">},</span> <span class="nx">time</span><span class="p">);</span>
-        <span class="p">})</span>
-    <span class="p">}</span>
-
-    <span class="kd">let</span> <span class="nx">start</span> <span class="o">=</span> <span class="nx">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<h4 id="_12">在循环中使用<a class="headerlink" href="#_12" title="Permanent link"></a></h4>
+<div class="codehilite"><pre>    <span class="kd">let</span> <span class="nx">start</span> <span class="o">=</span> <span class="nx">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="mi">3</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">当前是第$</span><span class="p">{</span><span class="nx">i</span><span class="p">}</span><span class="nx">次等待</span><span class="p">..</span><span class="err">`</span><span class="p">);</span>
             <span class="nx">await</span> <span class="nx">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
@@ -2032,7 +1926,10 @@ body .markdown-body
     <span class="nx">start</span><span class="p">();</span>
 </pre></div>
 
-<h4 id="_14">爬虫中使用<a class="headerlink" href="#_14" title="Permanent link"></a></h4>
+<h4 id="_13">爬虫中使用<a class="headerlink" href="#_13" title="Permanent link"></a></h4>
+<blockquote>
+<p>使用的模块：request、fs、cheerio</p>
+</blockquote>
 <div class="codehilite"><pre>    <span class="kr">const</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
     <span class="kr">const</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
     <span class="kr">const</span> <span class="nx">cheerio</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cheerio&#39;</span><span class="p">);</span>
