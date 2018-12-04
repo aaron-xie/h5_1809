@@ -13,7 +13,7 @@ http.createServer((req,res)=>{
     let pathname = url.parse(req.url).pathname;
 
     // 获取绝对路径，用于读取图片内容
-    let realPath = path.join(__dirname,pathname);
+    let realPath = path.join(__dirname,pathname);//f:xx/xxx/xxx/img/tiantian.jpg
 
     console.log('path：',pathname);
     console.log('realpath：',realPath);
