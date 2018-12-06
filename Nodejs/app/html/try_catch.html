@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>try_catch</title>
+</head>
+<body>
+    <script>
+        console.log('start');
+
+        try{
+            //尝试执行这里的代码，如过有错误，则执行catch中的代码（不会影响代码向后执行）
+            if(username == 'tiantian'){
+                console.log(username);
+            }
+        }catch(err){
+            console.log(err)
+        }
+        
+        // var arr = [10,20,30];
+        // arr.map((item)=>{
+        //     return item*item;
+        // })
+
+        console.log('end');
+    </script>
+</body>
+</html>
