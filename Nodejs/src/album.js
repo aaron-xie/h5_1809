@@ -20,7 +20,7 @@ http.createServer((req,res)=>{
     
     // 根据路径读取图片内容
     fs.readFile(realPath,(err,data)=>{
-        res.writeHead(200,{'Content-Type':'image/jpeg'});
+        res.writeHead(200,{'Content-Type':'text/jpeg'})
         res.end(data);
     });
 }).listen(3005,()=>{
