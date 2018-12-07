@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户登陆</title>
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.css">
+</head>
+<body>
+    <div class="container">
+        <h1>用户登陆</h1>
+        <div class="form-group">
+            <label for="username">用户名：</label>
+            <input type="text" class="form-control" id="username" placeholder="请求输入有效的用户名">
+            <div class="invalid-feedback">
+                    用户名或密码不正确
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">密码：</label>
+            <input type="password" class="form-control" id="password" placeholder="请输入密码">
+            <div class="invalid-feedback">
+                    用户名或密码不正确
+            </div>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">7天免登陆</label>
+        </div>
+        <button type="submit" class="btn btn-primary btnLogin">登录</button>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded',()=>{
+            let btnLogin = document.querySelector('.btnLogin');
+            let username = document.querySelector('#username');
+            let password = document.querySelector('#password');
+
+            btnLogin.onclick = function(){
+                let xhr = new XMLHttpRequest();
+                xhr.onload = function(){
+                    if(xhr.status === 200){
+                        let res = JSON.parse(xhr.responseText);
+
+                        if(res.code == 1){
+                            location.href="../index.html"
+                        }else{
+                            // alert('用户名或密码不正确');
+                            username.classList.add('is-invalid')
+                            password.classList.add('is-invalid')
+                        }
+                    }
+                }
+                xhr.open('post','/login',true);
+                xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+                xhr.send(`username=${username.value}&password=${password.value}`);
+            }
+        })
+    </script>
+</body>
+</html>

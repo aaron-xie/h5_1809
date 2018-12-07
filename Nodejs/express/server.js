@@ -1,7 +1,22 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 
 //创建一个http服务器
 const app = express();
+
+// 跨域支持
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Content-Type,Content-Length, Authorization, Accept,X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+
+    // 跨域请求CORS中的预请求
+    if(req.method=="OPTIONS") {
+      res.send(200);/*让options请求快速返回*/
+    } else{
+      next();
+    }
+});
 
 // 静态资源服务器
 // 中间件：express.static
@@ -16,10 +31,6 @@ app.get('/cart',(req,res)=>{
     let cartlist = [{id:1,name:'iphonXs',price:8998},{id:2,name:'node7',price:998}]
     res.send(cartlist)
 });
-
-app.post('/cart',(req,res)=>{
-    res.send('shopping car post')
-})
 
 // 商品列表
 app.get('/list',(req,res)=>{
@@ -71,6 +82,43 @@ app.get('/search',(req,res)=>{
     // 2.根据关键字查询数据库
     // 3.把结果返回给前端
     res.send('这是数据');
+})
+
+
+// POST请求
+// 如何获取参数
+app.post('/cart',(req,res)=>{
+    res.send('shopping car post')
+})
+app.post('/login',bodyParser.urlencoded({ extended: false }),(req,res)=>{
+    console.log(req.body)
+
+    let user = [
+        {username:'laoxie',password:123456},
+        {username:'tiantian',password:888888}
+    ]
+    
+    // 根据用户名和密码
+    // 查询数据库，是否存在
+    let {username,password} = req.body;
+    let has = user.filter(item=>username==item.username&&password==item.password)
+    if(has.length>0){
+        res.send({code:1,msg:'success',data:[]});
+    }else{
+        res.send({code:0,msg:'fail',data:[]});
+    }
+    
+
+    // let content = '';
+    // req.on('data',(chunk)=>{
+    //     content += chunk;
+    //     console.log(chunk)
+    // });
+
+    // req.on('end',()=>{
+    //     console.log(content);
+    //     res.send(content)
+    // })
 })
 
 // 监听端口

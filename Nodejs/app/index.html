@@ -19,7 +19,7 @@
             </ol>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                    <img class="d-block w-100" src="img/laoxie.jpg" alt="First slide">
+                    <img class="d-block w-100" src="img/g1.jpg" alt="First slide">
                     <div class="carousel-caption d-none d-md-block">
                     </div>
                 </div>
@@ -40,5 +40,19 @@
             <a href="/usercenter" class="btn btn-outline-primary">用户中心</a>
         </div>
     </div>
+
+    <script>
+        let xhr = new XMLHttpRequest();
+        xhr.onload = function(){
+            if(xhr.status === 200){
+                let res = JSON.parse(xhr.responseText);
+
+                console.log(res);
+            }
+        }
+        // xhr.open('get','http://localhost:3008/list?category=phone',true);
+        xhr.open('get','http://localhost:4008/sinaapi/api/config/list',true);
+        xhr.send();
+    </script>
 </body>
 </html>
