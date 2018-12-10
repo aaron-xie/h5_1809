@@ -5,15 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Soket</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <style>
+    time{font-size:12px;color:#58bc58;}
+    </style>
 </head>
 <body>
-    <h1>Web Socket</h1>
+    <div class="container">
+        <h1>多人聊天室</h1>
+        <div class="input-group">
+            <input type="text" class="form-control username" placeholder="请输入您的用户名">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary btnLogin" type="button">登录</button>
+                <button class="btn btn-outline-secondary btnLogout" type="button">退出</button>
+            </div>
+        </div>
+        <div class="content">
+            <ul class="list-group mt-3 mylist">
+                <!-- <li class="list-group-item">Cras justo odio</li> -->
+            </ul>
+        </div>
+        <div class="form-group mt-3">
+            <textarea name="msg" class="form-control msg"></textarea>
+        </div>
+        <button class="btn btn-primary btnSend">发送</button>
+        <div class="statusBar"></div>
+    </div>
+    
     <script>
-         var socket = new WebSocket('ws://localhost:1001');
-         // 连接成功
-        socket.onopen = (e)=>{
-            socket.send(JSON.stringify({status:1,data:'hello hello test'}));
-        }
+        /*
+            WebSocket
+                * 事件
+                    * onopen
+                    * onmessage
+                * 方法
+                    * send()
+                    * 
+            
+
+            定义消息状态：
+                * status
+                    * 0     退出
+                    * 1     登录
+                    * 2     发送消息
+        */
+         (()=>{
+            //  获取元素
+            let username = document.querySelector('.username');
+            let btnLogin = document.querySelector('.btnLogin');
+            let btnLogout = document.querySelector('.btnLogout');
+            let btnSend = document.querySelector('.btnSend');
+            let msg = document.querySelector('.msg');
+            let statusBar = document.querySelector('.statusBar');
+            let mylist = document.querySelector('.mylist');
+
+            // 所有消息
+            let msglist = [];
+            let socket;
+
+            btnLogin.onclick = ()=>{
+                socket = new WebSocket('ws://localhost:1001');
+
+                // 监听是否连接成功
+                // onopen
+                socket.onopen = e=>{
+                    statusBar.innerText = `连接 ${e.target.url} 服务器成功`;
+
+                    // 发送登录消息给服务器
+                    // 前后端交互的数据类型：String
+                    socket.send(JSON.stringify({
+                        status:1,
+                        data:{
+                            username:username.value
+                        }
+                    }));
+                }
+
+
+                // 接收服务器的信息
+                // 保存在event.data
+                socket.onmessage = e=>{
+                    let {status,data} = JSON.parse(e.data);
+                    
+                    switch(status){
+                        case 0: 
+                            statusBar.innerText = `${data.username} 已退出群聊`;
+                            break;
+                        case 1: 
+                            statusBar.innerText = `${data.username} 进入聊天室`;
+                            break;
+                        case 2: 
+                            // 把接收的消息写入msglist
+                            msglist.push(data);
+                            render();
+                            break;
+                    }
+                }
+            }
+
+
+            // 发送消息
+            btnSend.onclick = ()=>{
+                socket.send(JSON.stringify({
+                    status:2,
+                    data:{
+                        username:username.value,
+                        msg:msg.value,
+                        time:Date.now()
+                    }
+                }));
+
+
+                // 清空并获得焦点
+                msg.value = '';
+                msg.focus();
+            }
+
+            // 退出
+            btnLogout.onclick = ()=>{
+                socket.send(JSON.stringify({
+                    status:0,
+                    data:{
+                        username:username.value
+                    }
+                }));
+                socket.close();
+            }
+
+            // 渲染函数
+            function render(){
+                mylist.innerHTML = msglist.map(item=>{
+                    return `<li class="list-group-item">
+                        <h4>${item.username}</h4>
+                        <div>${item.msg}</div>
+                        <time>${new Date(item.time).toLocaleString()}</time>
+                    </li>`
+                }).join('');
+                
+            }
+         })();
     </script>
     
 </body>
