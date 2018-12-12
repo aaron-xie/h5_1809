@@ -1185,7 +1185,7 @@ values ('John', 'Doe', 'john@example.com');</code></p>
 <div class="codehilite"><pre>    mongod.exe --dbpath D:<span class="se">\d</span>ata<span class="se">\m</span>ongodb<span class="se">\d</span>b
 </pre></div></p>
 <blockquote>
-<p>启动成功后，可通过http://127.0.0.1:27017/访问</p>
+<p>启动成功后，可通过 <a href="http://127.0.0.1:27017">http://127.0.0.1:27017</a> 访问</p>
 </blockquote>
 </li>
 <li>
@@ -1195,6 +1195,11 @@ values ('John', 'Doe', 'john@example.com');</code></p>
         path: d:\data\mongodb\log\mongod.log
     storage:
         dbPath: d:\data\mongodb\db
+</pre></div></p>
+</li>
+<li>
+<p>命令行执行
+<div class="codehilite"><pre>    mongod.exe --config c:<span class="se">\m</span>ongodb<span class="se">\m</span>ongod.cfg --service --serviceName MongoDB --install
 </pre></div></p>
 </li>
 <li>
@@ -1213,7 +1218,7 @@ values ('John', 'Doe', 'john@example.com');</code></p>
 <blockquote>
 <p>输入help可以看到基本操作命令</p>
 </blockquote>
-<h4 id="_7">数据库操作<a class="headerlink" href="#_7" title="Permanent link"></a></h4>
+<h4 id="database">数据库操作(Database)<a class="headerlink" href="#database" title="Permanent link"></a></h4>
 <ul>
 <li>查看所有数据库： <code>show dbs</code></li>
 <li>查看当前使用的数据库<ul>
@@ -1223,21 +1228,90 @@ values ('John', 'Doe', 'john@example.com');</code></p>
 </li>
 <li>显示当前db状态: <code>db.stats()</code></li>
 <li>查看当前db的链接地址: <code>db.getMongo()</code></li>
-<li>创建/切换数据库: <code>use dbname</code><blockquote>
+<li>创建/切换数据库: <code>use DBNAME</code><blockquote>
 <p>如果数据库不存在，则创建数据库，否则切换到指定数据库。</p>
 </blockquote>
 </li>
 <li>删除当前使用数据库: <code>db.dropDatabase()</code></li>
 </ul>
-<h4 id="_8">文档操作<a class="headerlink" href="#_8" title="Permanent link"></a></h4>
+<h4 id="collection">集合操作(Collection)<a class="headerlink" href="#collection" title="Permanent link"></a></h4>
 <blockquote>
-<p>集合、文档</p>
+<p>利用use DBNAME 切换到当前数据库后，可以进行集合与文档的操作</p>
 </blockquote>
 <ul>
-<li>获取当前db的所有集合: <code>db.getCollectionNames()</code></li>
-<li>插入文档： <code>db.COLLECTION_NAME.insert(document)</code></li>
-<li>查询文档： <code>db.COLLECTION_NAME.find()</code><ul>
-<li></li>
+<li>查询所有集合: <ul>
+<li><code>db.getCollectionNames()</code></li>
+<li><code>show collections</code></li>
+</ul>
+</li>
+<li>创建集合：<ul>
+<li><code>db.createCollection('集合名')</code>;<blockquote>
+<p>PS:只有创建了集合，数据库才能成功创建</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>删除集合：<ul>
+<li><code>db.集合.drop();</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="document">文档操作(Document)<a class="headerlink" href="#document" title="Permanent link"></a></h4>
+<blockquote>
+<p>文档就是数据，这里的所有操作都是针对数据
+格式：db.集合.方法()</p>
+</blockquote>
+<ul>
+<li>增（插入数据）： <ul>
+<li>insert()</li>
+<li>insertOne()</li>
+<li>inertMany()</li>
+</ul>
+</li>
+<li>删（删除数据）<ul>
+<li>deleteOne()</li>
+<li>deleteMany()</li>
+</ul>
+</li>
+<li>改（更新数据）<ul>
+<li>update(query,newData)</li>
+<li>updateOne()</li>
+<li>updateMany()
+<div class="codehilite"><pre>     <span class="c1">//更新指定字段</span>
+     <span class="c1">//查找name属性为tiantian的数据，并更新age属性为27</span>
+     <span class="nx">db</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">update</span><span class="p">({</span><span class="nx">name</span><span class="o">:</span><span class="s1">&#39;tiantian&#39;</span><span class="p">},{</span><span class="nx">$set</span><span class="o">:</span><span class="p">{</span><span class="nx">age</span><span class="o">:</span><span class="mi">27</span><span class="p">}})</span>
+</pre></div></li>
+</ul>
+</li>
+<li>
+<p>查（查询数据）： </p>
+<ul>
+<li>查询所有：<code>db.集合.find()</code></li>
+<li>按条件查询（支持多条件）：<code>db.集合.find(条件)</code></li>
+<li>查询第一条（支持条件）：<code>db.集合.findOne(条件)</code></li>
+</ul>
+<div class="codehilite"><pre>    <span class="c1">//查询user下所有数据</span>
+    <span class="nx">db</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">find</span><span class="p">();</span>
+
+    <span class="c1">// 查询user下年龄为38的</span>
+    <span class="nx">db</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">age</span><span class="o">:</span><span class="mi">38</span><span class="p">})</span>
+
+    <span class="c1">// 查询user下年龄大于38的</span>
+    <span class="nx">db</span><span class="p">.</span><span class="nx">user</span><span class="p">.</span><span class="nx">find</span><span class="p">({</span><span class="nx">age</span><span class="o">:</span><span class="p">{</span><span class="nx">$gt</span><span class="o">:</span><span class="mi">38</span><span class="p">}})</span>
+</pre></div>
+
+</li>
+</ul>
+<h4 id="_7">条件与筛选<a class="headerlink" href="#_7" title="Permanent link"></a></h4>
+<ul>
+<li>限制数量：<code>db.表名.find().limit(数量);</code></li>
+<li>跳过指定数量：<code>db.表名.find().skip(数量)</code></li>
+<li>比较查询<ul>
+<li>大于：$gt</li>
+<li>小于：$lt</li>
+<li>大于等于：$gte</li>
+<li>小于等于：$lte</li>
+<li>非等于：$ne</li>
 </ul>
 </li>
 </ul>
@@ -1277,10 +1351,10 @@ values ('John', 'Doe', 'john@example.com');</code></p>
 
     <span class="c1">//使用数据库也可以使用以下方式</span>
     <span class="c1">//1.连接mongoDB</span>
-    <span class="nx">MongoClient</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">&quot;mongodb://localhost:27017&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">db</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">MongoClient</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s2">&quot;mongodb://localhost:27017&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">database</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">throw</span> <span class="nx">err</span><span class="p">;</span>
         <span class="c1">// 连接数据库，无则自动创建</span>
-        <span class="kd">let</span> <span class="nx">database</span> <span class="o">=</span> <span class="nx">db</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="s1">&#39;laoxie&#39;</span><span class="p">);</span>
+        <span class="kd">let</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">database</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="s1">&#39;laoxie&#39;</span><span class="p">);</span>
     <span class="p">});</span>
 </pre></div></p>
 </li>
@@ -1307,36 +1381,4 @@ values ('John', 'Doe', 'john@example.com');</code></p>
         <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;创建集合!&quot;</span><span class="p">);</span>
         <span class="nx">db</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
     <span class="p">});</span>
-</pre></div>
-
-<ul>
-<li>数据操作<ul>
-<li>增<ul>
-<li>insertOne()</li>
-<li>inertMany()</li>
-<li>insert()</li>
-</ul>
-</li>
-<li>删<ul>
-<li>deleteOne</li>
-<li>deleteMany</li>
-</ul>
-</li>
-<li>改<ul>
-<li>updateOne</li>
-<li>updateMany</li>
-<li>update</li>
-</ul>
-</li>
-<li>查<ul>
-<li>find()</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>条件<ul>
-<li>limit()</li>
-<li>skip()    跳过条数</li>
-</ul>
-</li>
-</ul></article></body></html>
+</pre></div></article></body></html>
