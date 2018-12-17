@@ -36,6 +36,7 @@ Router.post('/',upload.array('goodspic',5),(req,res)=>{// upload/
     })
 });
 
+
 // api路径：/upload/goods
 // upload的方法：
 //  * single(name)
