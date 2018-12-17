@@ -5,6 +5,7 @@ const express = require('express');
 const userRouter = require('./user');
 const goodsRouter = require('./goods')
 const categoryRouter = require('./category')
+const uploadRouter = require('./upload')
 
 let Router = express.Router();
 
@@ -15,6 +16,9 @@ Router.use('/user',userRouter);
 Router.use('/goods',goodsRouter);
 
 // 关于商品分类的路由
-Router.use('/category',categoryRouter)
+Router.use('/category',categoryRouter);
+
+// 上传
+Router.use('/upload',uploadRouter)
 
 module.exports = Router;

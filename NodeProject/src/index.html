@@ -8,5 +8,57 @@
 </head>
 <body>
     <h1>首页</h1>
+    <!-- <form action="/upload/goods" method="post" enctype="multipart/form-data"> -->
+        <input type="file" name="goodspic" id="goodspic" multiple />
+        <button class="btnSend">单个上传</button>
+        <button class="btnSends">多个上传</button>
+    <!-- </form> -->
+    <script>
+        (()=>{
+            /*
+                FormData
+                    * 实例化一个ForData: new FormData()
+                    * 方法
+                        * append(name,value) 往FormData实例中添加信息
+
+            */
+            let goodspic = document.querySelector('#goodspic');
+            let btnSend = document.querySelector('.btnSend');
+            let btnSends = document.querySelector('.btnSends');
+
+            btnSend.onclick = ()=>{
+                console.log('file:',goodspic.files);
+                let formData = new FormData();
+                formData.append('goodspic',goodspic.files[0]);
+                formData.append('goodsid','123abc');
+
+                let xhr = new XMLHttpRequest();
+                xhr.onload = ()=>{
+                    console.log(xhr.responseText);
+                }
+                xhr.open('post','/upload/goods',true);
+                xhr.send(formData)
+            }
+
+            btnSends.onclick = ()=>{
+                console.log('file:',goodspic.files);
+                let formData = new FormData();
+               
+                // 遍历files并写入formData
+                for(let i=0;i<goodspic.files.length;i++){
+                    formData.append('goodspic',goodspic.files[i]);
+                }
+
+
+                let xhr = new XMLHttpRequest();
+                xhr.onload = ()=>{
+                    let res = JSON.parse(xhr.responseText)
+                    console.log(res);
+                }
+                xhr.open('post','/upload',true);
+                xhr.send(formData)
+            }
+        })();
+    </script>
 </body>
 </html>
