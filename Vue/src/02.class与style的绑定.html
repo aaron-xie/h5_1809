@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>02.class与style的绑定</title>
+    <style>
+        .active{color:#f00;}
+        .dpn{display:none}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h4>{{username}}</h4>
+    </div>
+    <script src="assets/vue.js"></script>
+    <script>
+        /**
+            绑定事件：
+                * v-on:事件类型
+                * 简写：@事件类型
+
+            指令：
+                * v-show  通过样式实现显示隐藏
+                * v-if    通过节点渲染实现显示隐藏
+                    * v-else
+
+        */
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                show:true,//是否显示
+                username:'laoxie'
+            },
+            template:`<div>
+                <h2>h5 1809</h2>
+                <button @click="show=!show">{{show?'隐藏':'显示'}}</button>
+                <div v-if="show">
+                    <h4>{{username}}</h4>
+                    <img src="img/g1.jpg"/>
+                </div>
+                <div v-else>
+                    <h4>俄罗斯美女</h4>
+                    <img src="img/g3.jpg"/>
+                </div>
+            </div>`
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>03.v-for列表循环</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+</head>
+<body>
+    <div id="app" class="p-5">
+            <ul class="nav nav-tabs">
+                <li class="nav-item" v-for="(tab,idx) in tabs" @click="changeTab(idx)">
+                    <a :class="{'nav-link':true,active:idx===activeIndex}" href="#">{{tab}}</a>
+                </li>
+            </ul>
+            <div class="card" v-for="(con,idx) of contents" v-show="idx===activeIndex">
+                <div class="card-body">
+                    {{tabs[idx] + '最爱' + con}}
+                </div>
+            </div>
+    </div>
+    <script src="assets/vue.js"></script>
+    <script>
+        /**
+            tab标签切换
+                * 标签与内容一一对应
+            
+            指令
+                * v-for
+                    * v-for ...in 
+                    * v-for ...of
+                * v-on
+            配置选项
+                * methods
+        */
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                tabs:['laoxie','malin','tiantian','yueyue','lemon'],
+                contents:['写代码','买买买','大保健','刷牙','跟着tiantian大保健'],
+
+                activeIndex:0 //高亮tab的索引值
+            },
+
+            // 配置方法（事件处理函数等...）
+            methods:{
+                changeTab(idx){
+                    // 事件处理函数中的this指向Vue的实例
+                   this.activeIndex = idx
+                }
+            }
+        })
+    </script>
+</body>
+</html>
