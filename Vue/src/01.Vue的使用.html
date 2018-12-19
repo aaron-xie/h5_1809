@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>01.Vue的使用</title>
+    <style>
+        .border{border:5px solid #f00}
+        .size{width:120px;}
+        .circle{border-radius: 50%}
+    </style>
+</head>
+<body>
+    <!-- View层 -->
+    <div id="app">
+        <h1>Vue的使用</h1>
+    </div>
+
+    <script src="assets/vue.js"></script>
+    <script>
+        // var app = document.getElementById('#app')
+        // app.innerHTML = data.username
+
+        /**
+         * 单向数据绑定：
+         *  * {{}}  插值表达式
+         *  * v-text
+         *  * v-html
+         * 指令directive
+         *      * v-model：进行双向数据绑定
+         *      * v-bind:属性
+         */
+
+        // Model层
+        let data = {
+            username:'tiantian',
+            nickname:'<strong>胖田</strong>',
+            touxiang:'img/tiantian.jpg',
+            imgClass:'border'
+        }
+
+        // ViewModel层
+        let vm = new Vue({
+            // 把Vue实例的信息挂载到#app元素
+            el:'#app',
+
+            // 把数据关联到ViewModel
+            data:data,
+
+            // 把View关联到ViewModel
+            template:`<div>
+                    <button v-text="nickname">显示</button>
+                    <input type="text" v-model="username" />
+                    <p class="msg">hello {{username}}</p>
+                    <div v-html="nickname"></div>
+                    <img :src="touxiang" :class="{active:true,box:false}"/>
+                    <select v-model="imgClass">
+                        <option value="border">border</option>
+                        <option value="size">size</option>
+                        <option value="circle">circle</option>
+                    </select>
+                </div>`
+        });
+    </script>
+</body>
+</html>
