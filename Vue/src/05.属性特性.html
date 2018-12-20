@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>05.属性特性</title>
+</head>
+<body>
+	<input type="text" id="username">
+	<script>
+		/*
+			对象属性：
+				* 属性：属性值
+
+			对象的属性特性：
+				* 值属性（有一个值的属性）
+					* configurable	可配置型（总开关，用于控制其他属性特性是否可修改）
+					* writable  	可写性（是否可写）
+					* enumerable	可枚举（遍历）性
+					* value
+
+				* 存储器属性
+					* configurable
+					* enumerable
+					* getter   获取
+					* setter   设置
+
+			* 设置属性特性，必须使用特定方法：Object.defineProperty(obj,key,opt)
+				* obj:要操作的对象
+				* key:要设置的属性
+				* opt：属性特性
+			* 查询属性特性：Object.getOwnPropertyDiscriptor()
+
+
+			需求：如何让属性只读
+		 */
+		
+		// 传统的属性定义方式：
+		// 	* writable,enumerable的值为true
+		// 设置属性特性，必须使用特定方法：Object.defineProperty(obj,key,opt)
+		
+		var person = {
+			name:'tiantian',
+			age:28,
+			gender:'女'
+		}
+
+		// 设置age属性不可写：把writable设为false
+		Object.defineProperty(person,'age',{
+			writable:false
+		});
+
+		// 设置gender属性不可遍历：把enumerable设为false
+		Object.defineProperty(person,'gender',{
+			enumerable:false
+		})
+
+
+		// 通过Object.defineProperty定义的属性，属性特性默认为false
+		Object.defineProperty(person,'nickname',{
+			enumerable:true,
+			value:'小甜甜'
+		});
+
+
+		let laoxie = {
+			english:120
+		}
+
+		// 存储器属性
+		Object.defineProperty(person,'score',{
+			enumerable:true,
+			get:function(){
+				// 获取score属性，会执行这里的代码
+
+				return laoxie.english;
+			},
+			set:function(newValue){
+				// 设置score的属性，会执行这里的代码
+				
+				console.log(666,newValue)
+			}
+		});
+
+
+		person.scroe;//得到getter返回的值：59
+		person.score = 60;
+
+		person.age = 18;
+
+		// 遍历属性
+		for(var key in person){
+			console.log(key);
+		}
+
+
+		/*
+			双向数据绑定的原理
+
+				* View -> Model
+					* 给元素添加input事件
+					* 在时间中操作model属性
+				* Model -> View
+		 */
+		var data = {
+			username:'laoxie'
+		}
+
+		document.querySelector('#username').oninput = function(){
+			data.username = this.value;
+		}
+
+
+		// 把username属性变成存储器属性
+		// 用于监听username属性的修改
+		let defaultUsername = data.username;
+		Object.defineProperty(data,'username',{
+			get(){
+				return defaultUsername;
+			},
+			set(newValue){
+				document.querySelector('#username').value = newValue;
+				defaultUsername = newValue;
+			}
+		})
+
+		// data.username = 'yueyue';
+
+	</script>
+
+
+
+</body>
+</html>

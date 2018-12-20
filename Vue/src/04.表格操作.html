@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表格操作</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+    <style>
+        td img{width:30px;height:30px;}
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div>test</div>
+    </div>
+
+    <!-- 模板 -->
+    <template id="playList">
+        <div>
+            <h1>歌曲列表</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col"><input type="checkbox" v-model="checkAll">全选</th>
+                    <th scope="col">#</th>
+                    <th scope="col">歌手</th>
+                    <th scope="col">曲名</th>
+                    <th scope="col">封面</th>
+                    <th scope="col">文件地址</th>
+                    <th scope="col">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(song,idx) in songs">
+                        <td><input type="checkbox" v-model="selected" :value="idx"></td>
+                        <td>{{idx+1}}</td>
+                        <td>{{song.singer}}</td>
+                        <td>{{song.name}}</td>
+                        <td><img v-bind:src="song.filename"/></td>
+                        <td>{{song.src}}</td>
+                        <td><div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-success">播放</button>
+                            <button type="button" class="btn btn-outline-danger">删除</button>
+                            </div></td>
+                    </tr>
+                </tbody>
+                </table>
+        </div>
+    </template>
+
+    <script src="assets/vue.js"></script>
+    <script>
+        /*
+            * 配置选项
+                * el.innerHTML
+                * template
+                * render
+                * 三者都是往挂载点上显示内容，优先级：render>template>el.innerHTML
+
+        */
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                // 全选
+                checkAll:false,
+                // selected:[],//checkAll=false: [],checkAll=true:[0,1,2,3...]
+                songs: [
+                    {
+                        "src": "media/beyond - 喜欢你.mp3",
+                        "singer": "beyond",
+                        "name": "喜欢你",
+                        "filename": "media/beyond - 喜欢你.jpg"
+                    },
+                    {
+                        "src": "media/beyond - 真的爱你.mp3",
+                        "singer": "beyond",
+                        "name": "真的爱你",
+                        "filename": "media/beyond - 真的爱你.jpg"
+                    },
+                    {
+                        "src": "media/方大同 - 红豆 - 完整版.mp3",
+                        "singer": "方大同",
+                        "name": "红豆",
+                        "filename": "media/方大同 - 红豆 - 完整版.jpg"
+                    },
+                    {
+                        "src": "media/杨坤 - 无所谓.mp3",
+                        "singer": "杨坤",
+                        "name": "无所谓",
+                        "filename": "media/杨坤 - 无所谓.jpg"
+                    },
+                    {
+                        "src": "media/陈冠蒲-蓝眼泪.mp3",
+                        "singer": "陈冠蒲",
+                        "name": "蓝眼泪",
+                        "filename": "media/陈冠蒲-蓝眼泪.jpg"
+                    },
+                    {
+                        "src": "media/陈奕迅 - 十年.mp3",
+                        "singer": "陈奕迅",
+                        "name": "十年",
+                        "filename": "media/陈奕迅 - 十年.jpg"
+                    },
+                    {
+                        "src": "media/陈妃平-永远到底有多远.mp3",
+                        "singer": "陈妃平",
+                        "name": "永远到底有多远",
+                        "filename": "media/陈妃平-永远到底有多远.jpg"
+                    },
+                    {
+                        "src": "media/陈小春-我有什么资格不要你.mp3",
+                        "singer": "陈小春",
+                        "name": "我有什么资格不要你",
+                        "filename": "media/陈小春-我有什么资格不要你.jpg"
+                    },
+                    {
+                        "src": "media/陈慧娴-千千阙歌(粤).mp3",
+                        "singer": "陈慧娴",
+                        "name": "千千阙歌(粤)",
+                        "filename": "media/陈慧娴-千千阙歌(粤).jpg"
+                    },
+                    {
+                        "src": "media/陈慧林-花花宇宙.mp3",
+                        "singer": "陈慧林",
+                        "name": "花花宇宙",
+                        "filename": "media/陈慧林-花花宇宙.jpg"
+                    },
+                    {
+                        "src": "media/陈慧琳-记事本.mp3",
+                        "singer": "陈慧琳",
+                        "name": "记事本",
+                        "filename": "media/陈慧琳-记事本.jpg"
+                    },
+                    {
+                        "src": "media/陈琳 - 爱就爱了.mp3",
+                        "singer": "陈琳",
+                        "name": "爱就爱了",
+                        "filename": "media/陈琳 - 爱就爱了.jpg"
+                    },
+                    {
+                        "src": "media/陈超-求佛.mp3",
+                        "singer": "陈超",
+                        "name": "求佛",
+                        "filename": "media/陈超-求佛.jpg"
+                    },
+                    {
+                        "src": "media/筷子兄弟-小苹果.mp3",
+                        "singer": "筷子兄弟",
+                        "name": "小苹果",
+                        "album": "media/筷子兄弟-小苹果.jpg"
+                    },
+                    {
+                        "src": "media/凤凰传奇-最炫民族风.mp3",
+                        "singer": "凤凰传奇",
+                        "name": "最炫民族风",
+                        "album": "media/凤凰传奇-最炫民族风.jpg"
+                    }]
+            },
+            computed:{
+                // 一般用于需要复杂逻辑或运算才能得到的值，应当使用计算属性
+                // computed中的属性会根据data数据的变化而自动改变
+                // computed中的属性值都是一个函数，必须有返回值
+                selected(){
+                    // selected的值要根据checkAll的变化而变化
+                    let res = [];
+                    if(this.checkAll){
+                        res = this.songs.map((item,idx)=>{
+                            return idx;
+                        });
+                    }
+
+                    return res;
+                }
+            },
+            template: '#playList',
+            // render( createElement ){
+            //     //在函数中有更灵活的操作
+            //     // 一定要有返回值
+            //     return createElement('h4','createElement')
+            // }
+            
+        });
+
+        console.log(vm)
+    </script>
+</body>
+
+</html>
