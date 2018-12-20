@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>06自定义指令</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="username" v-laoxie-focus>
+    </div>
+
+    <script src="assets/vue.js"></script>
+    <script>
+        /*
+            利用自定义指令实现自动获得焦点的功能
+                * 全局
+                    * Vue.directive(name,option)
+                * 局部
+                
+
+            钩子函数：会在某一时刻自动执行的函数
+
+        */
+
+        Vue.directive('laoxie-focus',{
+            // 初始化时执行（默认）
+            bind(el,binding){
+                console.log('bind',el,binding)
+                
+            },
+
+            // ：元素插入页面时执行
+            inserted(el,binding){
+                console.log('inserted',el,binding)
+                el.focus();
+            },
+
+            // ：所在模板更新时执行
+            update(){
+                console.log('update')
+            },
+
+            // ：所在模板完成一次更新周期时调用
+            componentUpdated(){
+                console.log('componentUpdated')
+            },
+
+            // ：指令与元素解绑时执行
+            unbind(){
+                console.log('unbind')
+            }
+        });
+
+        // Vue实例
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                username:'tiantian'
+            }
+        });
+    </script>
+</body>
+
+</html>
