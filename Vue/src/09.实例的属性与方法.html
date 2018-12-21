@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>09.实例的属性与方法</title>
+    <script src="assets/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{username}}
+        <p v-for="(val,key,idx) in score">{{key}}：{{val}}</p>
+    </div>
+    <script>
+        /*
+            实例属性
+                * $data
+            
+            实例方法
+                * vm.$set(target,key,val)
+                * vm.$forceUpdate
+        */
+        let vm = new Vue({
+            // el:'#app',
+            data:{
+                username:'tiantian',
+                password:'123',
+                score:{
+                    english:59,
+                    chinese:60
+                }
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded',()=>{
+
+            vm.$mount('#app');
+        })
+
+        console.log(vm)
+    </script>
+</body>
+</html>
