@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>表格操作</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+    <style>
+        td img{width:30px;height:30px;}
+        .player{position:fixed;top:200px;left:0;right:0;}
+        .player audio{width:100%;}
+    </style>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+
+    <!-- 模板 -->
+    <template id="playList">
+        <div>
+            <h1>歌曲列表{{currentIndex}}</h1>
+            <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col"><input type="checkbox" v-model="checkAll">全选</th>
+                    <th scope="col">#</th>
+                    <th scope="col">歌手</th>
+                    <th scope="col">曲名</th>
+                    <th scope="col">封面</th>
+                    <th scope="col">文件地址</th>
+                    <th scope="col">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(song,idx) in songs" :key="idx" @click="selectRow(idx)" :class="{'table-success':isActive(idx)}">
+                        <td><input type="checkbox" v-model="selected" :value="idx"></td>
+                        <td>{{idx+1}}</td>
+                        <td>{{song.singer}}</td>
+                        <td>{{song.name}}</td>
+                        <td><img v-bind:src="song.filename"/></td>
+                        <td>{{song.src}}</td>
+                        <td><div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-outline-success" @click="play(idx)">播放</button>
+                            <button type="button" class="btn btn-outline-danger" @click.stop="remove(idx)">删除</button>
+                            </div></td>
+                    </tr>
+                </tbody>
+                </table>
+                <div class="player">
+                    <audio :src="currentSong.src" controls autoplay></audio>
+                </div>
+        </div>
+    </template>
+
+    <script src="assets/vue.js"></script>
+    <script>
+        /*
+            * 生命周期
+            Vue实例从初始化到销毁的过程
+
+            * 生命周期函数（钩子函数）
+        */
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                // 全选
+                // checkAll:false,
+                selected:[],//selected不包含所有的索引值：checkAll为false,selected包含所有索引值：checkAll为true
+                songs:[],
+
+                // 当前歌曲索引值
+                currentIndex:0,
+                    
+            },
+            computed:{
+                // 一般用于需要复杂逻辑或运算才能得到的值，应当使用计算属性
+                // computed中的属性会根据data数据的变化而自动改变
+                // computed中的属性值都是一个函数，必须有返回值
+
+                // 这里的函数默认为getter
+                checkAll:{
+                    // getter:获取checkAll属性值时执行的函数
+                    get(){
+                         // selected包含所有索引值：checkAll为true
+                        //selected不包含所有的索引值：checkAll为false,
+                        if(this.selected.length === this.songs.length){
+                            return true
+                        }else{
+                            return false
+                        }
+                    },
+
+                    // setter：设置checkAll是执行的函数
+                    set(checked){
+                        if(checked){
+                            // 全选按钮勾选时，选中下面所有复选框（给selected添加所有的索引值）
+                            this.selected = this.songs.map((item,idx)=>idx);//[0,1,2,3...]
+                        }else{
+                            // 清空所有复选框（清空selected数组）
+                            this.selected = [];
+                        }
+                    }
+                },
+
+                // 如果有某些属性依赖其他数据的结果，建议把这个属性放到computed中
+                currentSong(){
+                    return this.songs[this.currentIndex] || {};
+                }
+            },
+            methods:{
+                selectRow(idx){
+                    // 判断idx是否已经存在selected数组中
+                    // 存在：删除（取消复选框）
+                    // 不存在：添加（勾选复选框）
+                    let i = this.selected.indexOf(idx);
+                    if(i>=0){
+                        this.selected.splice(i,1);
+                    }else{
+                        this.selected.push(idx)
+                    }
+                },
+                isActive(idx){
+                    return this.selected.includes(idx);
+                },
+                remove(idx){
+                    this.songs.splice(idx,1);
+                    // e.stopPropagation();
+                },
+                play(idx){
+                    this.currentIndex = idx;
+                }
+            },
+            template: '#playList',
+            beforeCreate(){
+                console.log('beforeCreate',this.$data,this.$el)
+
+                // this===vm
+                let xhr = new XMLHttpRequest();
+                xhr.onload = ()=>{
+                    let res = JSON.parse(xhr.responseText);
+                    console.log(res);
+
+                    // this.songs = res;
+
+                    // this.currentIndex = 2;
+                }
+                xhr.open('get','assets/songs.json',true);
+                xhr.send();
+                
+                console.log('loading...')
+            },
+            created(){
+                console.log('created',this.$data,this.$el)
+                console.log('close loadding...')
+            },
+
+            beforeMount(){
+                console.log('beforeMount',this.$el)
+            },
+
+            mounted(){
+                console.log('mounted',this.$el)
+            },
+            beforeUpdate(){
+                console.log('beforeUpdate',this.currentIndex)
+            },
+            updated(){
+                console.log('updated',this.currentIndex)
+            },
+            beforeDestroy(){
+                console.log('beforeDestroy')
+            },
+            destroyed(){
+                console.log('destroyed')
+            }
+        });
+
+        console.log(vm)
+    </script>
+</body>
+
+</html>

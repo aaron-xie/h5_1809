@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>07事件捕获</title>
+</head>
+<body>
+	<div id="box">
+		<button class="btn">点我有惊喜</button>
+	</div>
+	<script>
+		(()=>{
+			let box = document.querySelector('#box');
+			let btn = document.querySelector('.btn');
+			
+
+			btn.addEventListener('click',()=>{
+				console.log('btn')
+			},false);
+
+			box.addEventListener('click',()=>{
+				console.log('box')
+			},false);
+
+			document.body.addEventListener('click',()=>{
+				console.log('body')
+			},true);
+
+			document.documentElement.addEventListener('click',()=>{
+				console.log('html')
+			},true);
+
+			document.addEventListener('click',()=>{
+				console.log('document')
+			},false);
+
+			window.addEventListener('click',()=>{
+				console.log('window')
+			},false);
+		})();
+	</script>
+</body>
+</html>
