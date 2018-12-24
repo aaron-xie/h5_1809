@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>11.组件-可复用的搜索组件</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+    <script src="assets/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <todo-list></todo-list>
+    </div>
+
+    <template id="tempTodoList">
+        <div class="todolist p-3">
+            <!-- 表单 -->
+            <todo-form @additem="addItem"></todo-form>
+            <!-- 内容 -->
+            <todo-content :datalist="datalist"></todo-content>
+        </div>
+    </template>
+
+    <template id="tempTodoForm">
+        <div class="input-group mb-3">
+            <input type="search" ref="form" class="form-control" @keyup.13="add" v-model="text">
+            <div class="input-group-append">
+                <button class="btn btn-success" @click="add">添加</button>
+            </div>
+        </div>
+    </template>
+    <template id="tempTodoContent">
+        <table class="table">
+            <thead>
+                <tr>
+                <th scope="col" width="80"><input type="checkbox" v-model="checkAll">全选</th>
+                <th scope="col" width="50">#</th>
+                <th scope="col" width="300">待处理事项</th>
+                <th scope="col" width="80">状态</th>
+                <th scope="col" width="100">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr is="todo-item" v-for="(item,idx) in datalist" :key="item.id" :data="item" :idx="idx"></tr>
+            </tbody>
+        </table>
+    </template>
+
+    <template id="tempTodoItem">
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{idx+1}}</td>
+            <td>{{data.text}}</td>
+            <td>{{data.done ? '完成':'待办'}}</td>
+            <td>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-success">完成</button>
+                    <button class="btn btn-outline-danger">删除</button>
+                </div>
+            </td>
+        </tr>
+    </template>
+   
+    <script>
+        /*
+            组件通讯
+                * 子->父
+                    1. 在子组件上绑定自定义事件，如：additem
+                    2. 在子组件代码中执行自定义事件：$emit('additem')
+            
+            特殊属性
+                * key
+                * is
+                * ref
+
+        */
+        // todoForm
+        let todoForm = {
+            data(){
+                return {
+                    text:''
+                }
+            },
+            methods:{
+                add(){console.log(this.$refs)
+                    // console.log(6666)
+                    // this.handlerAdd({text:'xxx'})
+
+                    // 触发自定义事件：this.$emit(type,data)
+                    //  * type： 自定义事件名
+                    //  * data： 传输的数据
+
+                    this.$emit('additem',{
+                        text:this.text
+                    });
+
+                    // 清空并自动获得焦点
+                    this.text = '';
+                    this.$refs.form.focus();
+                }
+            },
+            template:`#tempTodoForm`,
+
+            mounted(){
+                // 进入页面，自动获得焦点
+                this.$refs.form.focus();
+            }
+        }
+
+
+        let todoItem = {
+            props:{
+                data:Object,
+                idx:[Number,String]
+            },
+            template:'#tempTodoItem'
+        }
+
+        // todoContent
+        let todoContent = {
+            props:{
+                datalist:{
+                    type:Array,
+                    required:true
+                }
+            },
+            data(){
+                return {
+                    checkAll:false
+                }
+            },
+            template:'#tempTodoContent',
+            components:{
+                todoItem
+            }
+        }
+
+        // 定义todolist组件
+        Vue.component('todo-list',{
+            data(){
+                return {
+                    datalist:[{
+                        id:parseInt(Math.random()*1000+1),
+                        text:'今晚打老虎',
+                        done:false
+                    }]
+                }
+            },
+            methods:{
+                addItem(item){console.log('item',item);
+                    // 传入的格式：{text}
+                    // 修改成所需格式：{text,id,done}
+                    item.id = parseInt(Math.random()*1000+1);
+                    item.done = false;
+
+                    this.datalist.push(item);
+                }
+            },
+            template:'#tempTodoList',
+
+            // 局部组件
+            components:{
+                todoForm,
+                todoContent,
+            }
+        });
+
+
+        new Vue({
+            el:'#app'
+        })
+    </script>
+        
+
+    </script>
+</body>
+</html>
