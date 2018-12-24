@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>11.组件-可复用的搜索组件</title>
+    <script src="assets/vue.js"></script>
+    <style>
+        #app>div{padding:20px;margin:20px;border-bottom:1px solid #ddd;}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div>
+            <search id="city" v-bind:datalist="citylist"/>
+        </div>
+        <div>
+            <search id="h5" v-bind:datalist="h5list" type="查询"/>
+        </div>
+        <div>
+            <search v-bind:datalist="['laoxie','tiantian','yueyue']"/>
+        </div>
+    </div>
+    <template id="templateSearch">
+        <div>
+            <input type="search" :list="id+'Result'"><button>{{type}}</button>
+            <datalist :id="id+'Result'">
+                <option v-for="item in datalist" :key="item" :value="item">{{item}}</option>
+            </datalist>
+        </div>
+    </template>
+    <script>
+        /*
+           可复用的搜索组件
+            * 组件通讯
+                * 父 -> 子
+                    1. 在组件标签中写入属性
+                    2. 在组件配置中声明props
+            * props数据验证
+                * 限定类型
+                * 指定默认值
+        */ 
+
+        // 定义全局组件
+        Vue.component('search',{
+            // 声明props属性（properties的简写）
+            // 等效于在data中设置datalist属性
+            // props:['datalist','id','type'],
+
+            // props数据验证
+            props:{
+                // 限定datalist的数据必须为数组
+                datalist:{
+                    type:Array,
+                    required:true
+                },
+                type:{
+                    type:String,
+                    default:'搜索'
+                },
+                id:{
+                    default:'search'
+                }
+            },
+            data(){
+                return {
+                    // datalist:[]
+                }
+            },
+            template:`#templateSearch`
+        });
+
+
+        let vm  = new Vue({
+            data:{
+                citylist:['北京','上海','广州','深圳','杭州','东莞','成都'],
+                h5list:['HTML','CSS','Javascript','Ajax','Vue','React']
+            },
+            el:'#app'
+        })
+
+        
+
+    </script>
+</body>
+</html>
