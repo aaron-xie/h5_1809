@@ -1,5 +1,6 @@
 ﻿#过滤文件夹
 node_modules/
+/exam/
 
 
 #过滤文件

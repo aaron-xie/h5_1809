@@ -48,15 +48,15 @@
     </template>
 
     <template id="tempTodoItem">
-        <tr>
-            <td><input type="checkbox"></td>
+        <tr :class="{'table-success':data.done}" @click="select(!data.selected,idx)">
+            <td><input type="checkbox" :checked="data.selected"></td>
             <td>{{idx+1}}</td>
             <td>{{data.text}}</td>
             <td>{{data.done ? '完成':'待办'}}</td>
             <td>
                 <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-success">完成</button>
-                    <button class="btn btn-outline-danger">删除</button>
+                    <button class="btn btn-outline-success" @click.stop="complete(idx)">完成</button>
+                    <button class="btn btn-outline-danger" @click.stop="remove(idx)">删除</button>
                 </div>
             </td>
         </tr>
@@ -65,9 +65,19 @@
     <script>
         /*
             组件通讯
+                * 父->子
+                    * props
                 * 子->父
-                    1. 在子组件上绑定自定义事件，如：additem
-                    2. 在子组件代码中执行自定义事件：$emit('additem')
+                    * 传递处理函数
+                    * 自定义事件+$emit()
+                        1. 在子组件上绑定自定义事件，如：additem
+                        2. 在子组件代码中执行自定义事件：this.$emit('additem')
+                    * 利用Vue实例作为中间桥梁
+                        1. 创建中间桥梁 let bus = new Vue()
+                        2. 在数据所在的组件中添加自定义事件
+                        3. 在子组件中触发自定义事件
+
+
             
             特殊属性
                 * key
@@ -75,6 +85,9 @@
                 * ref
 
         */
+        // 创建中间桥梁，用于实现多级组件通讯
+        let bus = new Vue();
+
         // todoForm
         let todoForm = {
             data(){
@@ -114,6 +127,17 @@
                 data:Object,
                 idx:[Number,String]
             },
+            methods:{
+                complete(idx){
+                    bus.$emit('completeitem',idx);
+                },
+                remove(idx){
+                    bus.$emit('removeitem',idx);
+                },
+                select(checked,idx){
+                    bus.$emit('selectitem',checked,idx);
+                }
+            },
             template:'#tempTodoItem'
         }
 
@@ -127,7 +151,17 @@
             },
             data(){
                 return {
-                    checkAll:false
+                    // checkAll:false
+                }
+            },
+            computed:{
+                checkAll:{
+                    get(){
+                        return this.datalist.every(item=>item.selected)
+                    },
+                    set(checked){
+                        bus.$emit('selectitem',checked);
+                    }
                 }
             },
             template:'#tempTodoContent',
@@ -143,18 +177,47 @@
                     datalist:[{
                         id:parseInt(Math.random()*1000+1),
                         text:'今晚打老虎',
-                        done:false
+                        done:false,     //是否完成
+                        selected:false, //是否选中
                     }]
                 }
             },
             methods:{
-                addItem(item){console.log('item',item);
+                // 添加待办事项
+                addItem(item){
                     // 传入的格式：{text}
                     // 修改成所需格式：{text,id,done}
                     item.id = parseInt(Math.random()*1000+1);
                     item.done = false;
+                    item.selected = false;
 
                     this.datalist.push(item);
+                },
+
+                // 完成待办事项
+                completeItem(idx){
+                    this.datalist[idx].done = true;
+                },
+
+                // 删除待办事项
+                removeItem(idx){
+                    this.datalist.splice(idx,1);
+                },
+
+                // 修改selected属性（选中或不选）
+                selectItem(checked,idx){
+                    // 全部操作
+                    if(idx===undefined){
+
+                        this.datalist.forEach(item=>{
+                            item.selected = checked;
+                        });
+                    }
+                    
+                    // 单个操作
+                    else{
+                        this.datalist[idx].selected = checked;
+                    }
                 }
             },
             template:'#tempTodoList',
@@ -163,6 +226,26 @@
             components:{
                 todoForm,
                 todoContent,
+            },
+
+            // 生命周期函数
+            mounted(){
+                // 给中间桥梁bus添加z自定义事件
+                bus.$on('additem',item=>{
+                    this.addItem(item);
+                });
+
+                bus.$on('completeitem',idx=>{
+                    this.completeItem(idx)
+                });
+
+                bus.$on('removeitem',idx=>{
+                    this.removeItem(idx)
+                });
+
+                bus.$on('selectitem',(checked,idx)=>{
+                    this.selectItem(checked,idx)
+                });
             }
         });
 
