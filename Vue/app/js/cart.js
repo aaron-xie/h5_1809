@@ -1,7 +1,12 @@
-export class Home{
+import { username } from "./home";
 
+function getData(data){
+    console.log(data);
 }
 
+let myname = 'laoxie';
 
-export let username = 'xxx'
+export let goodslist = [{},{}]
+export {myname};
 
+export default getData;

@@ -33,7 +33,6 @@ let TodoForm = {
             this.$refs.form.focus();
         }
     },
-    template:`#tempTodoForm`,
 
     mounted(){
         // 进入页面，自动获得焦点
@@ -41,7 +40,7 @@ let TodoForm = {
     }
 }
 
-export {TodoForm}
+export default TodoForm;
 
 // 等效于 export let TodoForm = {}
 </script>
