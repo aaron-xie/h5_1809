@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>11.组件-可复用的搜索组件</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+    <script src="assets/vue.js"></script>
+</head>
+<body>
+    <div id="app" class="p-3">
+        <div class="form-group">
+            <input type="text" class="form-control" v-model="username">
+        </div>
+        <p>data: {{username}}</p>
+        <p>computed: {{reverseName}} --  {{nowTime}}</p>
+        <p>methods: {{rName()}}   --   {{nTime()}}</p>
+    </div>
+    <script>
+        /*
+            data VS computed
+                * data 值属性
+                * computed 存储器属性
+            methods VS computed
+                * computed 存储器属性，具有缓存特性（模板中的其他属性有修改时，不会刷新）
+                * methods 是一个方法，调用需加()
+
+        */
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                username:'tiantian',
+                age:18
+            },
+            computed:{
+                // 复杂运算不建议直接写到{{}}中
+                // 建议使用computed或methods中处理
+                reverseName(){
+                    return this.username.split('').reverse().join('')
+                },
+
+                nowTime(){
+                    return Date.now();
+                }
+            },
+
+            methods:{
+                rName(){
+                    return this.username.split('').reverse().join('')
+                },
+                nTime(){
+                    return Date.now();
+                }
+            }
+        })
+    </script>
+        
+
+    </script>
+</body>
+</html>
