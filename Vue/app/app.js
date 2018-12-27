@@ -8,8 +8,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 new Vue({
     el:'#app',
-    template:`<Todolist/>`,
-    components:{
-        Todolist
+    // template:`<Todolist/>`,
+    // components:{
+    //     Todolist
+    // }
+    render(create){
+        return create(Todolist);
     }
 });

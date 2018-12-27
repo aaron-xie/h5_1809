@@ -8,8 +8,9 @@
 </template>
 
 <script>
+import bus from './bus';
 // 引入所需模块
-import TodoForm from './TodoForm.vue';
+import TodoForm from './TodoForm';
 import TodoContent from './TodoContent.vue';
 
 export default {
@@ -71,21 +72,21 @@ export default {
     // 生命周期函数
     mounted(){
         // 给中间桥梁bus添加z自定义事件
-        // bus.$on('additem',item=>{
-        //     this.addItem(item);
-        // });
+        bus.$on('additem',item=>{
+            this.addItem(item);
+        });
 
-        // bus.$on('completeitem',idx=>{
-        //     this.completeItem(idx)
-        // });
+        bus.$on('completeitem',idx=>{
+            this.completeItem(idx)
+        });
 
-        // bus.$on('removeitem',idx=>{
-        //     this.removeItem(idx)
-        // });
+        bus.$on('removeitem',idx=>{
+            this.removeItem(idx)
+        });
 
-        // bus.$on('selectitem',(checked,idx)=>{
-        //     this.selectItem(checked,idx)
-        // });
+        bus.$on('selectitem',(checked,idx)=>{
+            this.selectItem(checked,idx)
+        });
     }
 }
 </script>

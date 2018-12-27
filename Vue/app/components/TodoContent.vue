@@ -16,6 +16,8 @@
 </template>
 
 <script>
+import bus from './bus';
+
 // 引入todoItem
 import TodoItem from './TodoItem.vue';
 
@@ -38,7 +40,7 @@ export default {
                 return this.datalist.every(item=>item.selected)
             },
             set(checked){
-                // bus.$emit('selectitem',checked);
+                bus.$emit('selectitem',checked);
             }
         }
     },

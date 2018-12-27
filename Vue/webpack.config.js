@@ -22,6 +22,17 @@ module.exports = {
     devServer:{
         contentBase:'./app/',
         port:1809,
+        open:true
+    },
+
+    resolve:{
+        // 别名
+        alias:{
+            'vue$':'vue/dist/vue',
+            'com':'src/components',
+            '@':'src'
+        },
+        extensions:['.js','.json','.vue']
     },
 
     // 加载器配置

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>11.组件-可复用的搜索组件</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.css">
+    <script src="assets/vue.js"></script>
+</head>
+<body>
+    <div id="app" class="p-3">
+        <my-button class="btn-success"><span slot="cn">首页</span><span slot="en">Home</span></my-button>
+        <my-button class="btn-primary">购物车Cart</my-button>
+
+        <carousel :data="imgs">
+            <div class="pic" slot-scope="props">
+                <ul>
+                    <li v-for="img in props.data">
+                        <img :src="img" />
+                    </li>
+                </ul>
+            </div>
+            <button class="btn btn-secondary" slot="prev">上一张</button>
+            <button class="btn btn-secondary" slot="next">下一张</button>
+        </carousel>
+    </div>
+
+    <template id="tempCarousel">
+        <div class="carousel">
+            <!-- 如何把这里的数据传到组件中 -->
+            <slot :data="data" :current="1"></slot>
+            <slot name="prev"></slot>
+            <slot name="next"></slot>
+        </div>
+    </template>
+    <script>
+        /*
+            插槽slot
+                * 默认插槽
+                * 具名插槽：让组件使用这更加灵活使用
+                * 作用域插槽：实现私人定制
+
+        */
+       Vue.component('myButton',{
+            template:`<button class="btn">
+                <slot name="cn"></slot>
+                <slot></slot>
+                <slot name="en"></slot>
+            </button>`
+       });
+
+       Vue.component('Carousel',{
+            props:['data'],
+            template:`#tempCarousel`
+       });
+
+        let vm = new Vue({
+            el:'#app',
+            data:{
+                imgs:['img/g1.jpg','img/g3.jpg','img/laoxie.jpg','img/tiantian.jpg']
+            }
+        })
+    </script>
+</body>
+</html>
