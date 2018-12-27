@@ -18,7 +18,7 @@
 <script>
 import bus from './bus';
 
-import Button from './Button.vue';
+import Button from './Button';
 
 // 暴露接口，用于其他模块的引入
 export default {

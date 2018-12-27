@@ -19,7 +19,7 @@
 import bus from './bus';
 
 // 引入todoItem
-import TodoItem from './TodoItem.vue';
+import TodoItem from './TodoItem';
 
 // 暴露接口，用于其他模块的引入
 export default {

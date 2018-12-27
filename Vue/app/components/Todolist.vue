@@ -11,7 +11,7 @@
 import bus from './bus';
 // 引入所需模块
 import TodoForm from './TodoForm';
-import TodoContent from './TodoContent.vue';
+import TodoContent from './TodoContent';
 
 export default {
     data(){

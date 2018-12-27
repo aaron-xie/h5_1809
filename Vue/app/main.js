@@ -1,7 +1,6 @@
-import Vue from 'vue/dist/vue';
+import Vue from 'vue';
 
-// 引入TodoList
-import Todolist from './components/Todolist.vue';
+import App from './App';
 
 // 引入bootstrap样式
 import 'bootstrap/dist/css/bootstrap.css';
@@ -13,6 +12,6 @@ new Vue({
     //     Todolist
     // }
     render(create){
-        return create(Todolist);
+        return create(App);
     }
 });

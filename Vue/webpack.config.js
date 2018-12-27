@@ -6,7 +6,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 module.exports = {
     // 入口文件
     entry:{
-        main:'./app/app.js',
+        main:'./app/main.js',
     },
 
     // 出口：打包文件放置的目录
@@ -29,7 +29,6 @@ module.exports = {
         // 别名
         alias:{
             'vue$':'vue/dist/vue',
-            'com':'src/components',
             '@':'src'
         },
         extensions:['.js','.json','.vue']

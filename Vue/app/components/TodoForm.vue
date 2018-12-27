@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Button from './Button.vue';
+import Button from './Button';
 
 // 暴露接口，用于其他模块的引入
 let TodoForm = {
