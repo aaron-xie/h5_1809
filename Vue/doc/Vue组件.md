@@ -360,34 +360,51 @@
 
 ####过渡动画 
 >`<transition>` & `<transition-group>` 
->Vue只有在插入，更新或者移除DOM元素时才会应用过渡效果，过渡效果的应用可以通过不同方式实现：
 
-1. 在CSS过渡和动画中自动应用class；
-2. 配合使用第三方的CSS动画库，如Animate.css；
-3. 在过渡钩子函数中使用JavaScript直接操作DOM；
-4. 配合使用第三方JavaScript动画库，如Velocity；
+在下列情形中，可以给任何元素和组件添加进入/离开过渡
+
+* 条件渲染 (使用 v-if)
+* 条件展示 (使用 v-show)
+* 动态组件
+* 组件根节点
+
+>过渡效果的应用可以通过以下方式实现：
 
 #####CSS过渡
-* CSS过渡类名
->组件过渡过程中，会有四个CSS类名进行切换，这四个类名与transition的name属性有关，比如name="fade"，会有如下四个CSS类名（默认为v）：
+* 通过CSS过渡类名
+>组件过渡过程中，会有四个CSS类名自动进行切换，会有如下四个CSS类名：
 
-    * fade-enter：进入过渡的开始状态，元素被插入时生效，只应用一帧后立即删除；
-    * fade-enter-active：进入过渡的结束状态，元素被插入时就生效，在过渡过程完成之后移除；
-    * fade-leave：离开过渡的开始状态，元素被删除时触发，只应用一帧后立即删除；
-    * fade-leave-active：离开过渡的结束状态，元素被删除时生效，离开过渡完成之后被删除；
+    * v-enter：进入过渡的开始状态，元素被插入时生效，只应用一帧后立即删除；
+    * v-enter-active：进入过渡的结束状态，元素被插入时就生效，在过渡过程完成之后移除；
+    * v-leave：离开过渡的开始状态，元素被删除时触发，只应用一帧后立即删除；
+    * v-leave-active：离开过渡的结束状态，元素被删除时生效，离开过渡完成之后被删除；
 
     ![transition](./img/transition.png "Optional title")
 
-#####属性
-* 自定义过渡类名
+  >可以通过transition的name属性修改类名（如name="fade"），
+
+* 通过`<transition>`的属性自定义过渡类名
   * enter-class
   * enter-active-class
+  * enter-to-class
+
   * leave-class
   * leave-active-class
+  * leave-to-class
   
   >可配合animate.css框架实现过渡效果
 
-#####JavaScript过渡（事件）
+  ```html
+    <transition
+      enter-active-class="bounceIn"
+      leave-active-class="bounceOut"
+    >
+    </transition>
+  ```
+
+#####JavaScript过渡
+>通过内置事件实现过渡动画效果
+
 ```html
     <transition
       v-on:before-enter="beforeEnter"

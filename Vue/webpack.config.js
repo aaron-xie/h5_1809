@@ -1,6 +1,7 @@
 const path = require('path');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
@@ -12,7 +13,8 @@ module.exports = {
     // 出口：打包文件放置的目录
     output:{
         path:path.resolve(__dirname,'./dist/'), //打包文件存放路径
-        filename:'[name].js'
+        filename:'js/[name][hash:5].js',
+        // publicPath:'/'
     },
 
     // 编译模式
@@ -93,6 +95,9 @@ module.exports = {
         }),
 
         // Vue-loader的使用，在15.*之后的版本都需要伴随 VueLoaderPlugin
-		new VueLoaderPlugin(),
+        new VueLoaderPlugin(),
+        
+        // 每次编译先清除dist目录
+        new CleanWebpackPlugin('dist')
     ]
 }
