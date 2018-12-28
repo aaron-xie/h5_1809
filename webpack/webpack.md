@@ -39,14 +39,41 @@ WebPack可以看做是模块打包机：它做的事情是，分析你的项目�
 * output: 输出设置
     * path: 打包后的文件存放的路径
     * filename: 打包后输出的文件名
+        * `[name]`：以入口名作为文件名
+        * `[hash]`：添加hash值
     * publicPath: 打包后index.html代码中文件引用前缀（如：src,href等）
+
+    ```javascript
+        module.exports = {
+            //__dirname是一个nodejs的global变量，指代当前执行文件所在的文件夹
+            entry:  __dirname + "/app/main.js",//唯一入口文件
+            output: {
+                path: __dirname + "/public/js",//打包后的文件存放的路径
+                filename: "bundle.js"//打包后输出的文件名
+            }
+        }
+    ```
+
 * devServer：测试服务器
 >配合webpack-dev-server插件使用，webpack development server 是一个webpack可选的本地开发的server。它通过nodejs的express 来起一个server提供静态文件服务，同时它根据配置信息（webpack.config.js）来打包资源，**存在内存中**，同时当你的代码发生改变的时候，它还可以刷新你的浏览器。它是一个单独的npm module，通过npm install webpack-dev-server --save-dev来给项目安装依赖。
 
   * contentBase： 服务器路径（默认：项目的根目录）
   * port: 指定端口（默认：8080）
-  * inline: 是否自动刷新（默认：true）。
+  * inline: 是否自动刷新（默认：true）
+  * open: 是否自动打开浏览器（默认：false）
   * historyApiFallback: 对于单页面程序，浏览器的histroy可以设置成html5 history api或者hash
+  * proxy: 服务器代理（一般用于解决ajax跨域问题）
+  >webpack-dev-server的实现方法其实是对http-proxy-middleware的封装
+
+    ```js
+        proxy:{
+            "/api":{
+                target:"http://api.douban.com/v2/movie",//代理目标服务器
+                changeOrigin: true,
+                pathRewrite: {'^/api' : ''}, //替换部分路径
+            }
+        }
+    ```
 * mode：模式
     - production（默认）
     - development
@@ -54,20 +81,22 @@ WebPack可以看做是模块打包机：它做的事情是，分析你的项目�
 * modules
   - rules: 配置Loader（加载器）规则（[详情](#Loader（加载器）)）
 * plugin:插件（[详情](#Plugins（插件）)）
-* assetsSubDirectory: 除了 index.html 之外的静态资源要存放的路径，
-* assetsPublicPath: 代表打包后，index.html里面引用资源的的相对地址
-      
+* resolve
+    * alias     别名
+    * mainFields 
+    * extensions 默认扩展名
 
-```javascript
-    module.exports = {
-      //__dirname是一个nodejs的global变量，指代当前执行文件所在的文件夹
-      entry:  __dirname + "/app/main.js",//唯一入口文件
-      output: {
-        path: __dirname + "/public/js",//打包后的文件存放的路径
-        filename: "bundle.js"//打包后输出的文件名
-      }
-    }
-```
+    ```js
+        resolve: {
+            alias: {
+                'vue$' : 'vue/dist/vue.js',
+                '@':path.resolve('src')
+            },
+            mainFields: ['browser', 'main'],
+            extensions:['.js', '.json']
+        }
+    ```
+      
 
 ###运行
 * 写好配置文件后，在终端里运行命令进行打包操作
@@ -91,7 +120,7 @@ WebPack可以看做是模块打包机：它做的事情是，分析你的项目�
 * module.rules(Array)
     - test：一个用以匹配loaders所处理文件的拓展名的正则表达式（必须）
     - use(Object|Array)
-        * loader(String)：loader的名称，多个loader用数组实现
+        * loader(String)：loader的名称
         * options(Object):配置loader参数
     - loader(String|Array)
     >PS：loader为use.loader的简写，可以支持多个loader(处理顺序从后往前)
@@ -108,6 +137,8 @@ WebPack可以看做是模块打包机：它做的事情是，分析你的项目�
   * babel-core: 核心功能
   * babel-preset-env：解析ES6语法
   * babel-preset-react: 解析JSX
+
+  >注意babel-loader与babel-core的版本问题
 
 ###css-loader
 >作用是让webpack可以解析执行css文件

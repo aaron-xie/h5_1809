@@ -73,7 +73,7 @@
     template:'<tr><td>test</td></tr>'
   });
 ```
->以上解析的结果为，tr被鸡西到了table外面，解决方式也很简单，利用特殊的is属性实现（）
+>以上解析的结果为，tr被解析到了table外面，解决方式也很简单，利用特殊的is属性实现
 
 ```html
   <table>
@@ -85,9 +85,8 @@
 ####父组件->子组件： 
 组件实例的作用域是孤立的。这意味着不能（也不应该）在子组件的模板内直接引用父组件的数据。要让子组件使用父组件的数据，需要通过子组件的props选项
 
-* props声明属性：声明的属性会自动成为组件实例的属性（可通过this访问）
->（PS：组件中的属性如果不利用props声明，则自动称为组件根元素的属性）
-  * prop是单向绑定的，当父组件的属性变化时，将传导给子组件，但是不会反过来
+* props声明属性：声明的属性会自动成为组件实例的属性（可通过this.xx访问）
+>prop传递是单向的，当父组件的属性变化时，将传导给子组件，但是不会反过来
 
 
 ```html
@@ -126,7 +125,8 @@
 * 非prop属性：不通过props声明的属性
 >此类属性会自动成为组件根节点的属性
 
-#####Prop数据验证
+* prop数据验证
+>对传入的prop属性进行校验，如：数据类型、必填、默认值等
 ```javascript
   Vue.component('my-component', {
     props: {
@@ -139,7 +139,7 @@
         type: String,
         required: true
       },
-      // 带有默认值的数字，无propD属性传入时，默认得到100
+      // 带有默认值的数字，无prop属性传入时，默认得到100
       propD: {
         type: Number,
         default: 100
@@ -164,22 +164,23 @@
 ```
 
 ####子组件->父组件： 自定义事件的系统 + $emit()
-<strong style="color:#58bc58">PS：Vue不允许在子组件中直接修改props传入的父组件数据，正确的做法是把它们作为子组件数据的初始值</strong>
+<strong style="color:#58bc58">PS：Vue遵循**单向数据流**原则，不允许在子组件中直接修改props传入的父组件数据，正确的做法是把它们作为子组件数据的初始值，然后通过自定义事件系统，利用$emit()方法触发父组件函数来达到修改的效果</strong>
 
 * 方式一（推荐）：
   1. 子组件上自定义事件（如:show），并使用父组件的事件处理函数（handler）
   >`<mycom v-on:show="handler" />`
   2. 子组件内部触发自定义事件并传递参数
   >this.$emit('show',100)
-  会触发父组件的事件处理函数，从而实现数据传递
+  会触发父组件的事件处理函数，从而实现数据修改
 
 * 方式二：
-  1. 可以利用.sync修饰符（如下color属性）
-  2. 子组件触发更新`this.$emit('update:xx',val)`
+  1. 可以利用v-bind的.sync修饰符（如下color属性）
+  2. 子组件调用`this.$emit('update:xx',val)`触发更新
 
 ```html
   <div id="app">
     <p :style="{fontSize:fontSize+'px'}">字体大小：{{fontSize}}</p>
+
     <btn-change :font-size="fontSize" @bigger="changeFontSize" :color.sync="color"></btn-change>
   </div>
 
@@ -226,27 +227,32 @@
 
 ####兄弟组件通信
 * 组件A -> 父组件 -> 组件B
+>组件A与组件B具有共同父级
+
 * 利用中间桥梁（Vue实例）
-  - 接收方：自定义事件
-  - 传输方：$emit()
+>组件A与组件B无任何联系
+
+  - 接收方（组件B）：自定义事件
+  - 传输方（组件A）：$emit()
 
 ```javascript
+    // 定义中间桥梁bus
     let bus = new Vue();
 
     //组件A
     let comA = {
         data(){
             return {
-            msg:'I am A'
+              msg:'I am A'
             }
         },
         template:`<div>
             <p>{{msg}}</p>
-            <button @click="sendToB">传数据到B组件</button>
+            <button @click="send">传数据到B组件</button>
         </div>`,
         methods:{
-            sendToB(){
-                bus.$emit('toB',this.msg);
+            send(){
+                bus.$emit('data',this.msg);
             }
         }
     }
@@ -256,8 +262,8 @@
         data:()=>({
             msg:'I am B'
         }),
-        mouted(){
-            bus.$on('toB',val=>this.msg = val)
+        mounted(){
+            bus.$on('data',val=>this.msg = val)
         },
         template:`<div><p>{{this.msg}}</p></div>`
     }
@@ -273,14 +279,12 @@
 ```
 
 ####利用插槽分发内容
-* 把组件内容传入组件模板
+* 利用组件内容进行通讯
 >在组件模板中利用`<slot></slot>`来承载组件内容,否则它的内容都会被忽略（被模板内容覆盖）
 
 ```html
   <!-- 使用指令 -->
-  <nav-link url="/home">
-    首页
-  </nav-link>
+  <nav-link url="/home">首页</nav-link>
 
   <!-- 定义指令 -->
   <script>
@@ -291,11 +295,12 @@
       //template:`<a :href="url"><span>Home</span></a>`
 
       // 可以用<slot></slot>保留内容和设置默认值
-      // 最终解析为：<a href="/home"><span>首页</span></a>
-      template:`<a :href="url"><slot>Home</slot></a>`
+      // 最终解析为：<a href="/home">首页<span>Home</span></a>
+      template:`<a :href="url"><slot></slot><span>Home</span></a>`
     });
   </script>
 ```
+
 * 具名插槽：给slot设置name属性，实现内容精准显示到模板具体位置
 ```html
   <Child>
@@ -311,10 +316,11 @@
     </div>
   </template>
 ```
+
 * 作用域插槽：slot-scope
 >Vue编译规则：父组件模板的所有东西都会在父级作用域内编译；子组件模板的所有东西都会在子级作用域内编译
 
-利用作用域插槽实现把组件模板的数据传到组件内容中处理，实现特殊定制
+利用作用域插槽实现把组件模板template中的数据传到组件内容中处理，实现特殊定制
 ```html
   <!-- 组件模板 -->
   <div class="box">
@@ -338,7 +344,7 @@
   <component v-bind:is="currentTabComponent"></component>
 ```
 * `<keep-alive>` 缓存组件
-如果把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染可以添加一个 keep-alive 
+>把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染可以添加一个 keep-alive 
 >包裹动态组件时，会缓存不活动的组件实例，而不是销毁它们，主要用于保留组件状态或避免重新渲染
 
     * include ： 指定缓存组件名
@@ -363,7 +369,7 @@
 
 #####CSS过渡
 * CSS过渡类名
->组件过渡过程中，会有四个CSS类名进行切换，这四个类名与transition的name属性有关，比如name="fade"，会有如下四个CSS类名：
+>组件过渡过程中，会有四个CSS类名进行切换，这四个类名与transition的name属性有关，比如name="fade"，会有如下四个CSS类名（默认为v）：
 
     * fade-enter：进入过渡的开始状态，元素被插入时生效，只应用一帧后立即删除；
     * fade-enter-active：进入过渡的结束状态，元素被插入时就生效，在过渡过程完成之后移除；
@@ -372,10 +378,16 @@
 
     ![transition](./img/transition.png "Optional title")
 
+#####属性
 * 自定义过渡类名
->通过enter-class、enter-active-class、leave-class、leave-active-class这四个特性来定义，可配合animate.css框架实现
+  * enter-class
+  * enter-active-class
+  * leave-class
+  * leave-active-class
+  
+  >可配合animate.css框架实现过渡效果
 
-#####JavaScript过渡（钩子函数）
+#####JavaScript过渡（事件）
 ```html
     <transition
       v-on:before-enter="beforeEnter"
@@ -434,13 +446,15 @@
 
 【案例】
 
-* 利用动态组件事件Tab标签切换
 * 实现一个可复用的搜索组件
   ![](./img/com_search.png "Optional title")
+* todolist待办事项列表
 * 开发goTop 返回顶部组件
 
 【练习】
-* 封装一个step步骤条
+
+* 利用动态组件事件Tab标签切换
+* 封装一个step步骤条组件
 
 ![stpes](./img/steps.png "Optional title")
 

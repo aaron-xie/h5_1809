@@ -52,6 +52,7 @@
 ```javascript
     const path = require('path');
     const HtmlWebpackPlugin = require('html-webpack-plugin');
+    const { VueLoaderPlugin } = require('vue-loader');
 
     // 导出配置模块
     module.exports = {
@@ -65,7 +66,7 @@
         },
         module:{
             rules:[
-                // 匹配.vue单文件模板，并利用vue、vue-loader、vue-template-compiler进行编译
+                // 匹配.vue单文件模板，并利用vue-loader、vue-template-compiler进行编译
                 {
                     test:/\.vue$/,
                     loader:['vue-loader']
@@ -76,7 +77,10 @@
             // 依据html模板生成一个自动引用你打包后的文件（js或css）的新的html页面
             new HtmlWebpackPlugin({
                 template:'./src/index.html'
-            })
+            }),
+
+            // Vue-loader 15.x之后的版本都需要伴随 VueLoaderPlugin， 否则报错
+		    new VueLoaderPlugin(),
         ]
     }
 ```
@@ -90,7 +94,7 @@
     new Vue({
         el:'#app',
 
-        // Vue 选项中的 render 函数若存在，则 Vue 构造函数不会从 template 选项或通过 el 选项指定的挂载元素中提取出的 HTML 模板编译渲染函数
+        // render 函数若存在，则忽略 template 或 el 元素中的内容
         render(create){
             return create(App);
         }
