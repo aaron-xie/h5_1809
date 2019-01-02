@@ -57,7 +57,13 @@ module.exports = {
                     loader:'babel-loader',
                     // 配置loader选项
                     options:{
-                        presets:['env'] //编译ES6->ES5
+                        presets:['env'], //编译ES6->ES5
+                        // plugins:[["component", [
+                        //     {
+                        //       "libraryName": "mint-ui",
+                        //       "style": true
+                        //     }
+                        //   ]]]
                     }
                 }
             },

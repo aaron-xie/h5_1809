@@ -36,6 +36,8 @@
   },
   "dependencies": {
     "animate.css": "^3.7.0",
-    "axios": "^0.18.0"
+    "axios": "^0.18.0",
+    "mint-ui": "^2.2.13",
+    "octicons": "^8.2.0"
   }
 }
