@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <router-view/>
     <mt-tabbar v-model="selected">
       <mt-tab-item :id="tab.name" v-for="tab in tabs" :key="tab.name" @click.native="goto(tab.name)">
@@ -20,6 +20,13 @@ Vue.use(myicons);
 import MintUI from "mint-ui";
 Vue.use(MintUI);
 import "mint-ui/lib/style.css";
+
+import "./sass/common.scss";
+
+import axios from 'axios';
+
+// 把axios写入Vue的原型对象，方便后面调用
+Vue.prototype.$axios = axios;
 
 // 按需引入
 // 1.配置webpack

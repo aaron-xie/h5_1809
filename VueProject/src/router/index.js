@@ -10,6 +10,8 @@ Vue.use(VueRouter);
 import Home from '@com/Home';
 import List from '@com/List';
 import Mine from '@com/Mine';
+import Search from '@com/Search';
+import Detail from '@com/Detail';
 
 // 4.实例化路由
 const routes = [
@@ -17,6 +19,8 @@ const routes = [
     { name:'Home', path: '/home', component: Home },
     { name:'List', path: '/list', component: List },
     { name:'Mine', path: '/mine', component: Mine },
+    { name:'Search', path: '/search', component: Search },
+    { name:'Detail', path: '/detail', component: Detail },
     { path:'/',redirect:{name:'Home'}}
   ]
 let router = new VueRouter({

@@ -24,7 +24,14 @@ module.exports = {
     devServer:{
         contentBase:'./src/',
         port:1809,
-        // open:true
+        // open:true,
+        proxy:{
+            '/dbapi':{
+                target:"http://api.douban.com/v2/movie",//代理目标服务器
+                changeOrigin: true,
+                pathRewrite: {'^/dbapi' : ''}, //替换部分路径
+            }
+        }
     },
 
     resolve:{
