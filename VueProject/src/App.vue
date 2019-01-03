@@ -2,7 +2,7 @@
   <div class="container">
     <router-view/>
     <mt-tabbar v-model="selected">
-      <mt-tab-item :id="tab.name" v-for="tab in tabs" :key="tab.name" @click.native="goto(tab.name)">
+      <mt-tab-item :id="tab.name" v-for="tab in tabs" :key="tab.name" @click.native="goto(tab.path)">
         <myicons :type="tab.icon"/>
         {{tab.text}}
       </mt-tab-item>
@@ -61,11 +61,12 @@ export default {
         }
     },
     methods:{
-        goto(name){
+        goto(path){
             // 编程式导航：利用js实现路由跳转
             // 通过this.$router获取到路由实例对象
             // this.$router.push({name});//等效于<router-link :to="{name:xxx}"/>
-           this.$router.replace({name});////等效于<router-link :to="{name:xxx}" replace/>
+           // this.$router.replace({name});////等效于<router-link :to="{name:xxx}" replace/>
+            this.$router.push({path});
         }
     }
 };
