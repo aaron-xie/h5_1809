@@ -20,7 +20,7 @@ module.exports = {
     // 编译模式
     mode:'development',
 
-    // 测试服务器：安装
+    // 测试服务器：安装webpack-dev-server
     devServer:{
         contentBase:'./src/',
         port:1809,
@@ -31,7 +31,8 @@ module.exports = {
                 changeOrigin: true,
                 pathRewrite: {'^/dbapi' : ''}, //替换部分路径
             }
-        }
+        },
+        host:'0.0.0.0',//localhost,127.0.0.1,ip地址都可以访问
     },
 
     resolve:{

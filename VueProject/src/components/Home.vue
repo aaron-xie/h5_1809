@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <mt-header title="豆瓣电影">
-      <mt-button slot="left" @click="goto('City')">[广州]</mt-button>
+      <mt-button slot="left" @click="goto('CityList')">[广州]</mt-button>
       <mt-button icon="search" slot="right" @click="goto('Search')"></mt-button>
     </mt-header>
     <div class="carousel">
@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       recommend: [],
-      hotmovie:'大黄蜂'
+      hotmovie:'大黄蜂',
+      currentCity:''
     };
   },
   methods:{
@@ -37,6 +38,9 @@ export default {
       }else if(id){
         obj.params = {id}
       }
+      // else{
+      //   obj.params = {go:true}
+      // }
       this.$router.push(obj);
     }
   },
@@ -53,6 +57,31 @@ export default {
         .sort((a, b) => b.collect_count - a.collect_count)
         .slice(0, 5);
     });
+
+    // 通过geolocation获取当前位置
+    let res = navigator.geolocation.getCurrentPosition(position=>{
+      
+
+      // 根据经纬度获取城市
+      let {latitude,longitude} = position.coords;
+      alert(latitude,longitude);
+
+      // 通过接口获取城市
+
+      // this.currentCity = city;
+    },error=>{
+      console.log(error)
+    },{
+          //是否使用高精度设备，如GPS。默认是true
+          enableHighAccuracy:true,
+          //超时时间，单位毫秒，默认为0
+          timeout:1000,
+          //使用设置时间内的缓存数据，单位毫秒
+          //默认为0，即始终请求新数据
+          //如设为Infinity，则始终使用缓存数据
+          maximumAge:0
+     });
+    // console.log(res);
   }
 };
 </script>

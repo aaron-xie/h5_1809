@@ -61,10 +61,10 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     - append：追加到当前路由后（只有相对路径有效）
     ```html
         <!-- 当前路由：/a , 点击变成：/b -->
-        <router-link to="b"> 
+        <router-link to="/b"> 
 
         <!-- 当前路由：/a , 点击变成：/a/b -->
-        <router-link to="b" append> 
+        <router-link to="/b" append> 
     ```
     - tag：让`<router-link>` 渲染成某种标签（默认：a）
     - active-class：匹配路由时`<router-link>`使用的类名
@@ -74,24 +74,25 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     - name 命名视图（默认：default）
 
 ####编程式导航
->利用Router实例（$router）的方法实现路由跳转
+>利用Router实例（this.$router）的方法实现路由跳转
 
-* router.push(location, onComplete?, onAbort?)
+* $router.push(location)
 ```javascript
-    this.$router.push('home');//等同于：<router-link to="home"></router>
+    this.$router.push('/home');//等同于：<router-link to="/home"></router>
 
     // 对象
-    this.$router.push({ path: 'home' })
+    this.$router.push({ path: '/home' })
+    this.$router.push({name:'Home'})
 ```
-* router.replace(location, onComplete?, onAbort?)
+* $router.replace(location)
 >类似于router.push()，唯一不同的是它不会向 history 添加新记录
-* router.go(n)
+* $router.go(n)/$router.back()/$router.forward()
 > 在history 记录中向前或者后退多少步，类似 window.history.go(n)
 
 ####路由传参
 
 #####动态路由
->路径改变自动把参数传入$route.params
+>通过`this.$route`获取当前路由信息，路径改变自动把参数传入$route.params
 
 
 ```javascript
@@ -111,8 +112,10 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     ]
 ```
 >PS：当路由从 `/user/laoxie` 导航到 `/user/tiantian`，原来的组件实例会被复用。因为两个路由都渲染同个组件`User`，比起销毁再创建，复用则显得更加高效。不过，这也意味着组件的生命周期钩子不会再被调用。解决方案：
+
     * 利用watch 监测 $route 对象变化
     * beforeRouteUpdate路由守卫（2.2+）
+
     ```js
         const User = {
             watch: {
@@ -130,7 +133,7 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     ```
 
 
-#####组件传参props
+#####路由组件传参：props
 >以上写法较为繁琐,而且组件与路由高度耦合，可以使用props组件传参的方式解耦
 
 * Boolean模式
@@ -211,6 +214,8 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
 12. 用创建好的实例调用 beforeRouteEnter 守卫中传给 next 的回调函数。
 
 ####全局守卫
+>所有的路由切换都会执行，一般写在路由配置文件中
+
 * router.beforeEach(fn)
     - to
     - from
@@ -220,6 +225,8 @@ Vue-Router允许我们通过不同的 URL 访问不同的内容。
     - from
 
 ####路由独享的守卫
+>写在路由配置中
+
 * beforeEnter(fn)
     - to
     - from

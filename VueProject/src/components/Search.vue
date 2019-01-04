@@ -61,6 +61,7 @@ export default {
     console.log(this.keyword);
     // 路由传参：缺点：获取繁琐
     // this.keyword = this.$route.params.keyword;
+    this.search()
   }
 };
 </script>

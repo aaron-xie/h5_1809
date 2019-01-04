@@ -9,7 +9,7 @@ export default new Promise((resolve,reject)=>{
         // 以字母作为属性写入对象indexCity
         'abcdefghijklmnopqrstuvwxyz'.toUpperCase().split('').forEach(letter=>{
             indexCity[letter] = [];
-        });
+        });//{A:[],B:[]....Z:[]}
 
         function getCity(items){
 

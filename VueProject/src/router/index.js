@@ -17,7 +17,8 @@ import List from '@com/List';
 import Mine from '@com/Mine';
 import Search from '@com/Search';
 import Detail from '@com/Detail';
-import City from '@com/City';
+import CityList from '@com/CityList';
+import Login from '@com/Login';
 
 // 4.实例化路由
 const routes = [
@@ -35,7 +36,10 @@ const routes = [
         {
           path:'in_theaters',//当url为/list/in_theaters匹配这个子路由
           name:'In_theaters',
-          component:In_theaters
+          component:In_theaters,
+          meta:{
+              requireAuth:true
+          }
         },
         {
           path:'coming_soon',
@@ -60,7 +64,14 @@ const routes = [
       ]
     },
     // { name:'List', path: '/list/:type', component: List },
-    { name:'Mine', path: '/mine', component: Mine },
+    { 
+      name:'Mine', 
+      path: '/mine', 
+      component: Mine,
+      meta:{
+          requireAuth:true
+      }
+    },
     { 
       name:'Search', 
       path: '/search', 
@@ -81,11 +92,47 @@ const routes = [
       // props:{name:'tiantian',age:28}
     },
     { name:'Detail', path: '/detail/:id', component: Detail },
-    { name:'City', path: '/city', component: City },
+    { name:'Login', path: '/login', component: Login },
+    { 
+      name:'CityList', 
+      path: '/citylist', 
+      component: CityList,
+      
+      // 路由独享守卫
+      // beforeEnter(to,from,next){
+      //   console.log(666);
+      //   if(to.params.go==true){
+      //     next()
+      //   }
+        
+      // }
+    },
     { path:'/',redirect:{name:'Home'}}
   ]
 let router = new VueRouter({
     routes
 });
+
+// 全局路由守卫
+// 在进入某个路由前执行的代码
+router.beforeEach((to,from,next)=>{
+  if(to.meta.requireAuth){
+    // 判断是否登录
+    if(sessionStorage.getItem('token')){
+      // if(router.app.$store.state.token){
+          next();
+      }else{
+          next({
+              path:'/login'
+          })
+      }
+  }else{
+    // 要进入to路由，必须调用next()方法
+      next();
+  }
+});
+router.afterEach((to,from)=>{
+  console.log('after')
+})
 
 export default router;
