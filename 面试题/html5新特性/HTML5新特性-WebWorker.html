@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>HTML5新特性-WebWorker</title>
+	<script>
+		/*
+			HTML5新特性
+				* 语义标签
+				* 增强型表单
+				* 视频Video和音频Audio
+				* SVG绘图
+				* Canvas绘图
+				* FileReader
+				* FormDate
+				* Geolocation
+				* 拖放API
+				* Web Worker
+				* Web Storage
+				* WebSocket
+
+
+			Web Worker
+			
+			我们都知道JavaScript这个语言在执行的时候是采用单线程进行执行的，也就是说在同一时间只能做一件事，采用同步执行的方式进行运行，如果出现阻塞，那么后面的代码将不会执行，HTML5则提出了web Worker标准，允许JavaScript有多个线程，但是子线程完全受主线程的控制，切子线程不能操作DOM，只有主线程可以操作DOM，所以以主线程为主的单线程执行原理成了JavaScript这门语言的核心
+
+			Web Worker的基本原理就是在当前的主线程中加载一个只读文件来创建一个新的线程，两个线程同时存在，且互不阻塞，并且在子线程与主线程之间提供了数据交换的接口:
+
+			* 主线程
+				* 方法
+					* worker.postMessage(): 发送数据
+					* worker.terminate()：结束线程
+				* 事件
+					* worker.onmessage: 接收数据（通过event.data来获取传入的参数）
+					* worker.onerror：异常处理事件
+			* 子线程
+				* 方法
+					* postMessage()
+				* 事件
+					* onmessage
+
+			* 注意事项：
+				* Worker必须在服务器环境下运行
+				* 通常用于更耗费 CPU 资源的任务
+				* worker无法访问以下JavaScript对象
+					* window 对象
+					* document 对象
+					* parent 对象
+		 */
+		console.log('start')
+
+			let worker = new Worker('js/worker.js');
+
+			worker.postMessage('name');
+
+			worker.onmessage = e=>{
+				console.log('main:',e.data);
+			}
+
+			// 异常处理
+			worker.onerror = function(e){
+			    console.log("error at "+e.filename +":" + e.lineno + e.message);
+			}
+		console.log('end')
+	</script>
+</head>
+<body>
+	<h1>HTML5新特性-WebWorker</h1>
+</body>
+</html>

@@ -22,9 +22,10 @@
 </template>
 <script>
 export default {
+  props:['keyword'],
   data() {
     return {
-      keyword: "",
+      // keyword: "",
       timer: null,
       result: []
     };
@@ -56,7 +57,11 @@ export default {
       // this.$router.push({name:'Detail',params:{id},query:{keyword:'xxx'}})
     }
   },
-  created() {}
+  created() {
+    console.log(this.keyword);
+    // 路由传参：缺点：获取繁琐
+    // this.keyword = this.$route.params.keyword;
+  }
 };
 </script>
 <style lang="scss">

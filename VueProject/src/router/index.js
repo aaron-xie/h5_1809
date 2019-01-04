@@ -17,6 +17,7 @@ import List from '@com/List';
 import Mine from '@com/Mine';
 import Search from '@com/Search';
 import Detail from '@com/Detail';
+import City from '@com/City';
 
 // 4.实例化路由
 const routes = [
@@ -60,8 +61,27 @@ const routes = [
     },
     // { name:'List', path: '/list/:type', component: List },
     { name:'Mine', path: '/mine', component: Mine },
-    { name:'Search', path: '/search', component: Search },
+    { 
+      name:'Search', 
+      path: '/search', 
+      component: Search,
+      
+      // Boolean模式：把pramas中的参数写入Search组件的属性
+      // 等效于：<Search {...params} />
+      props:true 
+
+      // Function模式
+      // 等效于：<Search :keywordk="route.query.keyword"/>
+      // props:(route)=>{
+      //   return {keyword:route.query.keyword}
+      // }
+
+      // Object模式：静态属性
+      // 等效于：<Search name="tiantian" age="28"/>
+      // props:{name:'tiantian',age:28}
+    },
     { name:'Detail', path: '/detail/:id', component: Detail },
+    { name:'City', path: '/city', component: City },
     { path:'/',redirect:{name:'Home'}}
   ]
 let router = new VueRouter({
