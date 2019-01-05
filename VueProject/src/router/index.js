@@ -110,6 +110,7 @@ const routes = [
     { path:'/',redirect:{name:'Home'}}
   ]
 let router = new VueRouter({
+    // mode:'history',
     routes
 });
 
