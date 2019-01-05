@@ -28,6 +28,29 @@ import axios from 'axios';
 // 把axios写入Vue的原型对象，方便后面调用
 Vue.prototype.$axios = axios;
 
+// loading效果
+// 利用axios拦截器全局设置
+import { Indicator } from 'mint-ui';
+axios.interceptors.request.use(config => {
+    Indicator.open();
+    console.log('config:',config);
+    config.params.token = '10086';
+    return config
+}, error => {
+    Indicator.close();
+    
+    return Promise.reject(error)
+})
+// http响应拦截器
+axios.interceptors.response.use(data => {
+    // 响应成功关闭loading
+    Indicator.close();
+    return data
+}, error => {
+    Indicator.close();
+    return Promise.reject(error)
+})
+
 // 按需引入
 // 1.配置webpack
 // 2.引入某个组件

@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+// import { Indicator } from 'mint-ui';
 export default {
   data() {
     return {
@@ -50,6 +51,7 @@ export default {
     getMovie(){
       // 以/dbapi开头的请求，进入到代理服务器（webpack配置）
       // /dbapi/in_theaters  -> http://api.douban.com/v2/movie/dbapi/in_theaters -> http://api.douban.com/v2/movie/in_theaters
+      
       this.$axios.get("/dbapi/in_theaters",{
         params:{
           city:this.currentCity
@@ -63,6 +65,10 @@ export default {
         this.recommend = data.subjects
           .sort((a, b) => b.collect_count - a.collect_count)
           .slice(0, 5);
+
+        // Indicator.close();
+      }).catch(()=>{
+        // Indicator.close();
       });
     }
   },
@@ -96,6 +102,10 @@ export default {
     */
   },
   mounted() {
+    // Indicator.open({
+    //     text:'loadding',
+    //     spinnerType:'fading-circle'
+    // });
     // 百度地图自动定位
     var map = new BMap.Map("bdmap");
     map.centerAndZoom("广州", 15);
