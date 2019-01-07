@@ -7,26 +7,52 @@
                 <p>库存：{{goods.kucun}}</p>
                 <input type="number" :value="goods.qty" @change="change($event,goods.id)">
                 <button @click="getKucun(goods.id)">更新库存</button>
+                <button @click="gKucun({id:goods.id})">mapAction</button>
+                <button @click="change3({id:goods.id,qty:60})">mapMutaction</button>
             </li>
         </ul>
     </div>
 </template>
 <script>
-import {mapState} from 'vuex';
+// 为了简化代码而引入
+import {mapState,mapGetters,mapMutations,mapActions} from 'vuex';
 
 export default {
     data(){
-        console.log('mapState:',mapState(['cartlist','step']))
+        //console.log('mapState:',mapState(['cartlist','step']))
         return {
-            goodslist:[],
-            ...mapState({
-                cartlist:state=>{
-                    console.log('111',state)
-                }
-            })
+            // 初始化数据
+            // goodslist:[],
         }
     },
+    // 把vuex中的state映射到computed属性
+    // computed:mapState([
+    //     'cart' //把this.cart映射为this.$store.state.cart
+    // ]),
+    computed:{
+        ...mapState({
+            // 映射this.goodslist为this.$store.state.cart.cartlist
+            goodslist:(state)=>{
+                return state.cart.cartlist
+            }
+        })
+    },
     methods:{
+        ...mapMutations({
+            // 把this.change2(xx)映射为this.$store.commit('changeQty',xx)
+            change2:'changeQty',
+
+            // this.change3(xx)
+            change3:(commit,payload)=>{
+                commit('changeQty',payload)
+            }
+        }),
+
+        ...mapActions({
+            gKucun(dispatch,payload){
+                dispatch('getKuncun',payload)
+            }
+        }),
         change(e,id){
             // 通过e.target.value获取输入框的值
             // 然后修改vuex中的值
@@ -47,6 +73,7 @@ export default {
     },
     mounted(){
         console.log(this.$store.state.cart)
+        console.log('this.cart:',this.cart)
     }
 }
 </script>

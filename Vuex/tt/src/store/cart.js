@@ -38,6 +38,26 @@ export default {
       })
     },
 
+    // 添加到购物车列表
+    add(state,payload){
+        state.cartlist.push(payload);
+    },
+
+    remove(state,payload){//{id:xxx}
+      let index;
+      state.cartlist.forEach((item,idx)=>{
+        if(item.id===payload.id){
+          index = idx;
+        }
+      })
+      state.cartlist.split(index,1)
+    },
+
+    // 清空
+    clear(state){
+      state.cartlist = [];
+    },
+
     // 修改库存
     changeKucun(state,payload){
       state.cartlist.forEach(item=>{

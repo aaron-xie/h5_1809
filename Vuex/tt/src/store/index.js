@@ -13,9 +13,5 @@ export default new Vuex.Store({
   modules:{
     cart,
     goods
-  },
-  state:{
-      a:100,
-      b:[1,2,3,4,5]
   }
 });
