@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>17.数组变异方法</title>
+    <style>
+        .active{color:#f00;}
+        .dpn{display:none}
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h4>数组变异方法</h4>
+        <ul>
+            <li v-for="goods in goodslist" :key="goods.name">{{goods.title}} - 价格：{{goods.price}}</li>
+        </ul>
+    </div>
+    <script src="assets/vue.js"></script>
+    <script>
+        /**
+            17.数组变异方法.html
+
+        */
+        let vm = new Vue({
+            el:'#app',
+            data:{
+               goodslist:[{title:'iphoneX',price:9998},{title:'findX',price:4998}]
+            }
+        })
+    </script>
+</body>
+</html>

@@ -69,6 +69,10 @@ export default {
         getKucun(id){
             // 在组件中调用actions: $store.dispatch()
             this.$store.dispatch('getKuncun',{id})
+        },
+
+        add2Cart(){
+            this.$store.commit('add',{})
         }
     },
     mounted(){
