@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>02.JSX语法</title>
+    <script src="lib/react.development.js"></script>
+    <script src="lib/react-dom.development.js"></script>
+    <script src="lib/babel.min.js"></script>
+</head>
+<body>
+    <h1>02.JSX语法</h1>
+    <div id="app"></div>
+    <script type="text/babel">
+        // 使用：React.createElement()
+        // let h2 = React.createElement('h2',{},'标题');
+        // let p = React.createElement('p',{},'内容');
+        // let div = React.createElement('div',{className:'box'},React.createElement('h2',{},'标题'),React.createElement('p',{},'内容'))
+      
+        let imgurl = 'img/mv5.jpg';
+        let styleObj = {color:'#58bc58',borderBottom:'1px solid #f00'}
+        ReactDOM.render(
+           //JSX
+           <div className="box">
+                <h2 style={styleObj}>标题</h2>
+                <p style={{color:'#f00'}}>内容</p>
+                {/*
+                <ul>
+                    <li><a href="#"><img src={imgurl}/></a></li>
+                    <li><input type="text" tabIndex="5"/></li>
+                    <li><input type="text" tabIndex="2"/></li>
+                    <li><input type="text" tabIndex="3"/></li>
+                    <li><input type="text" tabIndex="1"/></li>
+                </ul>
+            */}
+            </div>
+           ,
+           document.querySelector('#app')
+       )
+    </script>
+</body>
+</html>

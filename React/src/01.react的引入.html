@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>01.react的引入</title>
+    <script src="lib/react.development.js"></script>
+    <script src="lib/react-dom.development.js"></script>
+    <script src="lib/babel.min.js"></script>
+</head>
+<body>
+    <h1>react的引入</h1>
+    <div id="app"></div>
+    <script type="text/babel">
+        // 利用js方法创建节点
+        // let template = React.createElement('h2',{id:'subtitle',title:'test',className:"title"},'createElement测试')
+        
+        /*
+            JSX: JS与html代码混写的语法
+        */
+        ReactDOM.render(
+            // JSX
+            <h2 id="subtitle" className="title" title="test">
+                createElement测试
+            </h2>,
+            document.getElementById('app')
+        )
+    </script>
+</body>
+</html>
