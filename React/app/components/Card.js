@@ -44,7 +44,8 @@ class Card extends Component{
                     photo:'img/laoyao.jpg'
                 }
            ],
-           currentIndex:0
+           currentIndex:0,
+           num:10
         }
 
         // 在constructor中给事件处理函数绑定this
@@ -62,13 +63,33 @@ class Card extends Component{
         }
         // 修改state
         this.setState({
-            currentIndex:idx
+            currentIndex:idx,
+            num:this.state.num+1
+        },()=>{
+
+            console.log('::',this.state.num);
         })
+
+        // 函数方式
+        // this.setState(function(state){
+            
+        //     return {
+        //         num:state.num+1
+        //     }
+        // },function(a){
+        //     console.log(a,this.state.num)
+        // })
+
+
+        // 手动刷新组件
+        // this.state.currentIndex = 2;
+        // this.forceUpdate();
+
     }
 
     // 组件UI
     // 组件要显示什么内容，就return什么
-    render(){
+    render(){console.log(666)
         // 解构
         let {currentIndex,data} = this.state;
         return (
