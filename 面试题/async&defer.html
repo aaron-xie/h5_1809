@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="js/common.js" async></script>
+    <script src="js/home.js" async></script>
+</head>
+<body>
+    <h1>script标签的async&defer属性</h1>
+    <script>
+        /*
+            defer
+                * js的加载不阻塞html文档的渲染
+                * 在html文档渲染完成后执行
+            async
+                * js的加载不阻塞html文档的渲染
+                * js文件加载完成立即执行
+        */
+        console.log('html page')
+        document.addEventListener('DOMContentLoaded',()=>{
+            console.log('DOMContentLoaded')
+        })
+    </script>
+</body>
+</html>

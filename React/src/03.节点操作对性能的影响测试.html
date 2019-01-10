@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>03.节点操作对性能的影响测试</title>
+</head>
+<body>
+    <h1>03.节点操作对性能的影响测试</h1>
+    <button class="btn">0</button>
+    <script>
+         //测试以下节点操作代码花费时间，并尝试优化它
+        
+        console.time('lx')
+        // for(let i=0;i<10000;i++){
+        //     let btn = document.querySelector('.btn');
+        //     let num = btn.innerText;
+        //     btn.innerText = ++num;
+        // }
+        //优化代码
+        let btn = document.querySelector('.btn');
+        let num = btn.innerText;
+        for(let i=0;i<10000;i++){
+            ++num
+        }
+        btn.innerText = num;
+        console.timeEnd('lx');
+
+    </script>
+</body>
+</html>
