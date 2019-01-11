@@ -1,5 +1,7 @@
 import React,{Component} from 'react';
 
+import Button from './Button';
+
 /*
     给表单绑定vaue属性到状态state，必须同时提供修改函数onChange
 */
@@ -40,9 +42,11 @@ class TodoForm extends Component{
                 value={this.state.keyword}
                 onChange={this.handleChange}
                 ref="keyword"
+                autoFocus
                  />
                 <div className="input-group-append">
-                    <button className="btn btn-success" onClick={this.handleAdd}>搜索</button>
+                    {/* <button className="btn btn-success" onClick={this.handleAdd}>搜索</button> */}
+                    <Button className="btn btn-success" handleClick={this.handleAdd} text="搜索"/>
                 </div>
             </div>
         )
