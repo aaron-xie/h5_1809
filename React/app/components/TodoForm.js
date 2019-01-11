@@ -8,20 +8,22 @@ class TodoForm extends Component{
     constructor(){
         super();
         this.state = {
-            keyword:'xxx'
+            keyword:''
         }
 
-        this.handlerChange = this.handlerChange.bind(this);
-        this.handlerAdd = this.handlerAdd.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
     }
-    handlerChange(e){
+    handleChange(e){
         //    修改state状态值为输入框的内容
         this.setState({
             keyword:e.target.value
         })
     }
-    handlerAdd(){
-        this.props.handlerClick(this.state.keyword)
+    handleAdd(){
+        this.props.handleClick(this.state.keyword);
+
+        // 清空输入框并自动获得焦点
         this.setState({
             keyword:''
         },()=>{
@@ -29,7 +31,6 @@ class TodoForm extends Component{
         })
     }
     render(){
-        
         return (
             <div className="input-group mb-3">
                 <input 
@@ -37,11 +38,11 @@ class TodoForm extends Component{
                 className="form-control" 
                 placeholder="Recipient's username" 
                 value={this.state.keyword}
-                onChange={this.handlerChange}
+                onChange={this.handleChange}
                 ref="keyword"
                  />
                 <div className="input-group-append">
-                    <button className="btn btn-success" onClick={this.handlerAdd}>搜索</button>
+                    <button className="btn btn-success" onClick={this.handleAdd}>搜索</button>
                 </div>
             </div>
         )

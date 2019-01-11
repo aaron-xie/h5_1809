@@ -17,7 +17,7 @@ module.exports = {
     },
 
     // 编译模式
-    mode:'development',
+    mode:'production',
 
     // 测试服务器：安装
     devServer:{
