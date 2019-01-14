@@ -17,7 +17,7 @@ module.exports = {
     },
 
     // 编译模式
-    mode:'production',
+    mode:'development',
 
     // 测试服务器：安装
     devServer:{
@@ -46,7 +46,7 @@ module.exports = {
                     loader:'babel-loader',
                     // 配置loader选项
                     options:{
-                        presets:['env','react'] //编译ES6->ES5,JSX->JS
+                        presets:['env','react','stage-0'] //编译ES6->ES5,JSX->JS
                     }
                 }
             },
