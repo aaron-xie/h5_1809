@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import PropTypes from 'prop-types';
 
 // 引入组件
 import TodoForm from './TodoForm';
@@ -36,6 +37,26 @@ class TodoList extends Component{
         this.removeItem = this.removeItem.bind(this)
         this.completeItem = this.completeItem.bind(this)
         this.selecteItem = this.selecteItem.bind(this)
+    }
+
+    // 1.定义context
+    getChildContext(){
+        return {
+            addItem:this.addItem,
+            removeItem:this.removeItem,
+            completeItem:this.completeItem,
+            selecteItem:this.selecteItem,
+            data:this.state.data
+        }
+    }
+
+    // 2.父组件验证数据类型
+    static childContextTypes = {
+        addItem:PropTypes.func,
+        removeItem:PropTypes.func,
+        completeItem:PropTypes.func,
+        selecteItem:PropTypes.func,
+        data:PropTypes.array
     }
 
     // 数据处理方法

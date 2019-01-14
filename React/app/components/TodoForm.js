@@ -46,7 +46,7 @@ class TodoForm extends Component{
                  />
                 <div className="input-group-append">
                     {/* <button className="btn btn-success" onClick={this.handleAdd}>搜索</button> */}
-                    <Button className="btn btn-success" handleClick={this.handleAdd} text="搜索"/>
+                    <Button className="btn btn-success" handleClick={this.handleAdd}><span>搜索</span><strong>x</strong></Button>
                 </div>
             </div>
         )
