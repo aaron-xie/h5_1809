@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
     // 入口文件
     entry:{
-        main:'./src/main.js',
+        main:'./src/main.js'
     },
 
     // 出口：打包文件放置的目录
@@ -82,6 +82,13 @@ module.exports = {
         // 根据指定模板生成html结构
         new HtmlWebpackPlugin({
             template:'./src/template.html'
+        }),
+        new HtmlWebpackPlugin({
+            template:'./src/template.html',
+            filename:'login.html',
+            title:'用户登录',
+            hash:true,
+            // chunks:['login'],//login为入口文件名
         }),
         
         // 每次编译先清除dist目录
