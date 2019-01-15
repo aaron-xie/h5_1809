@@ -29,6 +29,14 @@ app.use('/sinaapi', proxy({
     }
 }));
 
+app.use('/api', proxy({
+    "target": "https://m.xx.cn",
+    "changeOrigin": true,
+    "pathRewrite": {
+        "^/api" : "/"
+    }
+}));
+
 app.listen(4008, function(){
     console.log('Server running on http://localhost:4004');
 });
