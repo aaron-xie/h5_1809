@@ -21,7 +21,7 @@ module.exports = {
 
     // 测试服务器：安装
     devServer:{
-        contentBase:'./dist/',
+        contentBase:'./src/',
         port:1809,
         open:true
     },

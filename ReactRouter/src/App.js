@@ -1,6 +1,8 @@
 import React from 'react';
 import {Route,Link,NavLink,Switch,Redirect,withRouter} from 'react-router-dom';
 
+import PropTypes from 'prop-types';
+
 import Home from './components/Home';
 import List from './components/List';
 import Mine from './components/Mine';
@@ -8,10 +10,15 @@ import Mine from './components/Mine';
 // 引入ant-design
 import { Menu, Icon } from 'antd';
 import 'antd/dist/antd.css';
+import './sass/page.scss';
 
 /*
     <Route/>组件的职责：根据浏览器url匹配Route的path属性，渲染相应的componet
     编程式导航
+        * 获取history对象
+            * 通过<Route/>渲染组件
+            * 通过withRouter高阶组件
+            * 
 */
 
 class App extends React.Component{
@@ -55,6 +62,10 @@ class App extends React.Component{
         // 
         this.props.history.push(key)
     }
+    componentDidMount(){
+        console.log('context:',this.context)
+        console.log('props:',this.props)
+    }
     render(){
         return (
             <div>
@@ -93,8 +104,15 @@ class App extends React.Component{
     }
 }
 
+
+App.contextTypes = {
+    router:PropTypes.object
+}
+
 // 利用withRouter高阶组件包装App组件
 App = withRouter(App);
+
+
 
 export default App;
 
