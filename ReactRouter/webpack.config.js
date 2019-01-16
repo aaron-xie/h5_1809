@@ -46,7 +46,14 @@ module.exports = {
                     loader:'babel-loader',
                     // 配置loader选项
                     options:{
-                        presets:['env','react','stage-0'] //编译ES6->ES5,JSX->JS
+                        presets:['env','react','stage-0'], //编译ES6->ES5,JSX->JS
+                        plugins: [
+                            ["import", {
+                              "libraryName": "antd",
+                              "libraryDirectory": "es",
+                              "style": "css" // `style: true` 会加载 less 文件
+                            }]
+                          ]
                     }
                 }
             },

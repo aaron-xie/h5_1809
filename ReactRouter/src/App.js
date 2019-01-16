@@ -6,10 +6,20 @@ import PropTypes from 'prop-types';
 import Home from './components/Home';
 import List from './components/List';
 import Mine from './components/Mine';
+import Goods from './components/Goods';
 
-// 引入ant-design
+// 引入ant-design（全部引入）
+// import { Menu, Icon } from 'antd';
+// import 'antd/dist/antd.css';
+
+// 引入Button组件（按需引入）
+// import Button from 'antd/lib/button';
+// import 'antd/lib/button/style';
+
+// 利用babel-plugin-import实现按需引入
 import { Menu, Icon } from 'antd';
-import 'antd/dist/antd.css';
+
+
 import './sass/page.scss';
 
 /*
@@ -52,7 +62,6 @@ class App extends React.Component{
     }
     handleChange({ item, key, keyPath }){
         //两个问题：1、如何获取路由路径，2、如何获取history对象
-        console.log(item, key, keyPath)
         this.setState({
             current:key
         });
@@ -63,8 +72,16 @@ class App extends React.Component{
         this.props.history.push(key)
     }
     componentDidMount(){
-        console.log('context:',this.context)
-        console.log('props:',this.props)
+
+        // 利用生命周期函数来保持当前路由高亮
+        // 获取当前路由（hash,history）
+        let hash = window.location.hash;// 可能得到的值：/home,/list,/list/computer
+        hash = hash.split('/')[1];
+
+        this.setState({
+            current:'/'+hash
+        })
+
     }
     render(){
         return (
@@ -97,7 +114,9 @@ class App extends React.Component{
                     <Route path="/home" component={Home}/>
                     <Route path="/list" component={List}/>
                     <Route path="/mine" component={Mine}/>
+                    <Route path="/goods/:id" component={Goods}/>
                     <Redirect from="/" to="/home"/>
+                    {/* <Route path="/" component={Home} exact/> */}
                 </Switch>
             </div>
         )
