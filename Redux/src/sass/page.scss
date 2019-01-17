@@ -1,0 +1,8 @@
+.home{
+    .ant-carousel{
+        background-color:#000;
+        .slick-slide{position: relative}
+        img{width:100%;height:200px;}
+        h4{position:absolute;left:50%;bottom:25px;transform: translate(-50%,0);color:#fff;}
+    }
+}
