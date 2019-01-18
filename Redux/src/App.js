@@ -15,7 +15,9 @@ import 'antd/dist/antd.css';
 
 import './sass/page.scss';
 
-import {connect} from 'react-redux';
+import {ReactReduxContext,connect} from 'react-redux';
+import * as all from 'react-redux';
+console.log('react-redux:',all)
 
 // import store from './store';
 // console.log('App:',store.getState());
@@ -56,6 +58,10 @@ class App extends React.Component{
         // this绑定
         this.handleChange = this.handleChange.bind(this);
     }
+
+    // 设置静态属性，用户获取Provider提供的store数据
+    static contextType = ReactReduxContext;
+
     handleChange({ item, key, keyPath }){
         //两个问题：1、如何获取路由路径，2、如何获取history对象
         this.setState({
@@ -82,9 +88,10 @@ class App extends React.Component{
     render(){
         // 在组件中获取redux的state
         // 通过this.props.cart,this.props.goods
-        console.log('props:',this.props)
+        console.log('App:',this)
         return (
             <div>
+
                 <Menu
                 mode="horizontal"
                 selectedKeys={[this.state.current]}

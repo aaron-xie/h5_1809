@@ -8,7 +8,12 @@ import {Provider} from 'react-redux';
 import App from './App';
 
 import store from './store';
-console.log(store)
+store.subscribe(()=>{
+    console.log(123)
+})
+store.subscribe(()=>{
+    console.log(456)
+})
 
 // console.log('initial:',store.getState());
 // store.subscribe(function(){
@@ -71,6 +76,48 @@ console.log(store)
 // // 修改state：唯一修改方式dispatch
 // store.dispatch({type:'ADD_TO_CART',payload:{id:1,name:'iphoneX',price:8998,qty:1}})
 // store.dispatch({type:'ADD_TO_CART',payload:{id:2,name:'Mate20 pro',price:7998,qty:2}})
+
+
+// redux的的原理
+let createStore = (reducer)=>{
+    // 初始化
+    let state = reducer();
+
+    let listeners = [];
+
+    // 获取状态
+    let getState = ()=>{
+        return state;
+    }
+
+    // 修改状态
+    let dispatch = (action)=>{
+        state = reducer(state,action);
+
+        listeners.forEach(listener=>listener());
+    }
+
+    // 监听状态修改
+    // 订阅者/发布者模式
+    let subscribe = (callback)=>{
+        listeners.push(callback);
+    }
+
+    return {
+        getState,
+        dispatch,
+        subscribe
+    }
+}
+
+// let store = createStore(reducer)
+// store.subscribe(()=>{
+    //console.log(666)
+//})
+// store.subscribe(()=>{
+    //console.log(777)
+//})
+// store.dispatch({type:'xx',payload:xxx})
 
 
 render(

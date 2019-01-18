@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {connect} from 'react-redux';
+import {ReactReduxContext,connect} from 'react-redux';
 
 import { Tabs,List,Skeleton,Avatar } from 'antd';
 
@@ -10,7 +10,10 @@ class Cart extends Component{
             payload:{id}
         })
     }
+    static contextType = ReactReduxContext;
+
     render(){
+        console.log('Cart:',this.context);
         return (
             <List
                 className="demo-loadmore-list"
