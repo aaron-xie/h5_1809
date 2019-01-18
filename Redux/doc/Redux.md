@@ -150,6 +150,7 @@ Reducer 必须是一个**纯函数**，用于指定state修改逻辑，它接受
 
 ##connect()
 >connect方法为React-Redux核心方法，它把react组件与redux中的Store真正连接在一起，connect方法接受两个参数(Function类型)，用于定义了 UI 组件的业务逻辑，返回容器组件
+* 格式：connect([mapStateToProps],[mapDispatchToProps])
 
 ###mapStateToProps
 >顾名思义，将state中的数据映射到UI组件的props，
@@ -183,3 +184,20 @@ Reducer 必须是一个**纯函数**，用于指定state修改逻辑，它接受
 ```
 
 
+#调式Redux程序
+1. 在谷歌应用商店下载redux-devtools
+2. 安装redux-devtools-extension
+```bash
+    npm install -save-dev redux-devtools-extension
+```
+
+3. 引入并使用
+```js
+    //store/index.js
+    import {composeWithDevTools } from 'redux-devtools-extension';
+    const store = createStore(rootReducer,composeWithDevTools());
+    export default store;
+```
+4. 在Chrome浏览器中调试redux程序
+
+![Redux测试工具](./img/reduxDevtools.png "Redux测试工具")

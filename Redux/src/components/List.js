@@ -6,6 +6,8 @@ import {connect} from 'react-redux';
 import { Tabs,List,Skeleton,Avatar } from 'antd';
 import axios from 'axios';
 
+import {add,changeQty} from '../actions/cartAction';
+
 
 class GoodsList extends Component{
     constructor(){
@@ -42,6 +44,7 @@ class GoodsList extends Component{
         history.push(match.url+path);
     }
     add2cart(goods){
+
         goods = {
             id:goods.goods_id,
             name:goods.goods_name,
@@ -73,7 +76,7 @@ class GoodsList extends Component{
         })
     }
     componentDidMount(){
-        let hash = window.location.hash.replace('#'+this.props.match.url,'');console.log(hash)
+        let hash = window.location.hash.replace('#'+this.props.match.url,'');
         this.setState({
             current:hash
         })
@@ -89,7 +92,24 @@ class GoodsList extends Component{
                     itemLayout="horizontal"
                     dataSource={this.state.goodslist}
                     renderItem={item => (
-                    <List.Item actions={[<a onClick={this.add2cart.bind(this,item)}>添加到购物车</a>]}>
+                    <List.Item actions={[<a onClick={()=>{
+                        // 判断商品是否已经存在
+                        let currentGoods = this.props.cartlist.filter(goods=>goods.id==item.goods_id);
+                        if(currentGoods.length>0){
+                            let {id,qty} = currentGoods[0];
+                            this.props.changeQty(id,qty+1);
+                        }else{
+                            let goods = {
+                                id:item.goods_id,
+                                name:item.goods_name,
+                                price:item.goods_price,
+                                imgurl:item.goods_image_url,
+                                qty:1
+                            }
+                            this.props.add2cart(goods)
+
+                        }
+                    }}>添加到购物车</a>]}>
                         <Skeleton avatar title={false} loading={item.loading} active>
                         <List.Item.Meta
                             avatar={<Avatar src={item.goods_image_url} />}
@@ -126,7 +146,22 @@ class GoodsList extends Component{
         )
     }
 }
-
-GoodsList = connect()(GoodsList);
+const mapStateToProps = (state,ownProps)=>{
+    return {
+        cartlist:state.cart.goodslist
+    }
+}
+const mapDispatchToProps = (dispatch,ownProps)=>{
+    console.log('ownProps:',ownProps)
+    return {
+        add2cart(goods){
+            dispatch(add(goods))
+        },
+        changeQty(id,qty){
+            dispatch(changeQty(id,qty))
+        }
+    }
+}
+GoodsList = connect(mapStateToProps,mapDispatchToProps)(GoodsList);
 
 export default GoodsList;
