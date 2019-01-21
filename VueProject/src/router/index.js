@@ -119,14 +119,22 @@ let router = new VueRouter({
 router.beforeEach((to,from,next)=>{
   if(to.meta.requireAuth){
     // 判断是否登录
-    if(sessionStorage.getItem('token')){
-      // if(router.app.$store.state.token){
-          next();
-      }else{
-          next({
-              path:'/login'
-          })
-      }
+    let token = sessionStorage.getItem('token');
+    // 发送ajax请求给后端进行验证
+    
+    // axios.get('/verifytoken').then(res=>{
+      // 验证通过则放行，否则回到登录界面
+      // let data = res.data;
+      if(token){
+        // if(router.app.$store.state.token){
+            next();
+        }else{
+            next({
+                path:'/login'
+            })
+        }
+    // })
+    
   }else{
     // 要进入to路由，必须调用next()方法
       next();
