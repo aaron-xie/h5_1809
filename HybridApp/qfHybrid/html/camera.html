@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../js/mui.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet"/>
+		<style>
+			.mui-slider-item img{height:160px;}
+			.imglist img {display:inline-block;box-sizing:border-box;width:48%;margin:10px;}
+		</style>
+	</head>
+	<body>
+		<h1>摄像头相关操作</h1>
+		<button type="button" class="mui-btn" id="btnPicture">拍照</button>
+		<button type="button" class="mui-btn mui-btn-primary" id="btnVideo">录像</button>
+		<button type="button" class="mui-btn mui-btn-success">扫码</button>
+		<div class="imglist"></div>
+		<img class="video"></div>
+		
+		<script>
+			document.addEventListener( "plusready", onPlusReady, false );
+			
+			function onPlusReady(){
+				mui.init();
+				// 获取元素
+				let btnPicture = document.querySelector('#btnPicture');
+				let imglist = document.querySelector('.imglist');
+				
+				//获取摄像头管理对象
+				let camera = plus.camera;
+				console.log('camera:',camera)
+				
+				btnPicture.onclick = ()=>{
+					// 获取某个摄像头,返回摄像头对象
+					let cmr = camera.getCamera();
+					console.log('cmr:',cmr)
+					
+					// 拍照
+					cmr.captureImage(path=>{
+						// 拍照成功
+						console.log('path:',path);
+						let realPath = plus.io.convertLocalFileSystemURL( path );
+						console.log('realPath:',realPath)
+						
+						let img = new Image();//document.createElement('img');
+						img.src = realPath;
+						let link = document.createElement('a');
+						link.href=realPath;
+						link.appendChild(img)
+						imglist.appendChild(link);
+					},{
+						resolution:cmr.supportedImageResolutions[0],
+						index:2
+					})
+					
+				}
+			}
+		</script>
+	</body>
+</html>

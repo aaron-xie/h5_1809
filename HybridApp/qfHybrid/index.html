@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title></title>
+    <script src="js/mui.min.js"></script>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+	<style>
+		.mui-slider-item img{height:160px;}
+		.imglist img {box-sizing:border-box;width:50%;margin:10px;}
+	</style>
+</head>
+<body>
+	<h1>h5主导的混合开发2</h1>
+	<div class="mui-slider">
+	  <div class="mui-slider-group mui-slider-loop">
+		<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="img/g5.jpg" /></a></div>
+		<div class="mui-slider-item"><a href="#"><img src="img/g3.jpg" /></a></div>
+		<div class="mui-slider-item"><a href="#"><img src="img/g4.jpg" /></a></div>
+		<div class="mui-slider-item"><a href="#"><img src="img/g5.jpg" /></a></div>
+		<div class="mui-slider-item mui-slider-item-duplicate"><a href="#"><img src="img/g3.jpg" /></a></div>
+	  </div>
+	</div>
+	
+	<ul class="mui-table-view">
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" id="btnCamera">
+				<span class="mui-media-object mui-pull-left mui-icon mui-icon-camera"></span>
+				<div class="mui-media-body">
+				    摄像头
+				    <p class='mui-ellipsis'>拍照、扫码、录像等...</p>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right">
+				<span class="mui-media-object mui-pull-left mui-icon mui-icon-mic"></span>
+				<div class="mui-media-body">
+				    语音助手
+				    <p class='mui-ellipsis'>语音搜索、唤醒、聊天...</p>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right">
+				<span class="mui-media-object mui-pull-left mui-icon mui-icon-image"></span>
+				<div class="mui-media-body">
+				    本地相册
+				    <p class='mui-ellipsis'>查看本地拍着文件</p>
+				</div>
+			</a>
+		</li>
+	</ul>
+	<div class="imglist"></div>
+	<script>
+		/*
+			HTML5+ API所有接口暴露在window.plus对象下
+		*/
+		document.addEventListener( "plusready", onPlusReady, false );
+		
+		function onPlusReady(){
+			mui.init();
+			var gallery = mui('.mui-slider');
+			gallery.slider({
+			  interval:3000//自动轮播周期，若为0则不自动播放，默认为0；
+			});
+			
+			document.querySelector('#btnCamera').onclick = ()=>{
+				// 创建一个webview
+				let wv = plus.webview.create('html/camera.html','page_camera');
+				
+				// 显示webview
+				plus.webview.show(wv,'slide-in-right');
+			}
+			
+			
+		}
+		
+	</script>
+</body>
+</html>
