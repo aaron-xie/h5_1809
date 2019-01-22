@@ -17,7 +17,9 @@
 		<button type="button" class="mui-btn mui-btn-primary" id="btnVideo">录像</button>
 		<button type="button" class="mui-btn mui-btn-success">扫码</button>
 		<div class="imglist"></div>
-		<img class="video"></div>
+		<div class="video">
+			<video id="videoPlayer"></video>
+		</div>
 		
 		<script>
 			document.addEventListener( "plusready", onPlusReady, false );
@@ -27,16 +29,18 @@
 				// 获取元素
 				let btnPicture = document.querySelector('#btnPicture');
 				let imglist = document.querySelector('.imglist');
+				let btnVideo = document.querySelector('#btnVideo');
+				let videoPlayer = document.querySelector('#videoPlayer');
 				
 				//获取摄像头管理对象
 				let camera = plus.camera;
-				console.log('camera:',camera)
+				console.log('camera:',camera);
+				
+				// 获取某个摄像头,返回摄像头对象
+				let cmr = camera.getCamera();
+				console.log('cmr:',cmr)
 				
 				btnPicture.onclick = ()=>{
-					// 获取某个摄像头,返回摄像头对象
-					let cmr = camera.getCamera();
-					console.log('cmr:',cmr)
-					
 					// 拍照
 					cmr.captureImage(path=>{
 						// 拍照成功
@@ -55,6 +59,34 @@
 						index:2
 					})
 					
+				}
+				
+				
+				// 录像
+				let player = null;
+				btnVideo.onclick = ()=>{
+					cmr.startVideoCapture(path=>{
+						// let realPath = plus.io.convertLocalFileSystemURL( path );
+						 plus.io.resolveLocalFileSystemURL( path, entry=>{
+							 console.log('entry:',entry);
+							 
+							 // 把视频路径写入播放器(有声音无界面)
+// 							 videoPlayer.src = entry.fullPath;
+// 							 videoPlayer.controls = true;
+							
+							if(!player){
+								player = plus.video.createVideoPlayer('videoplayer', {
+									src:entry.fullPath,
+									top:'100px',
+									left:'0px',
+									width: '100%',
+									height: '200px',
+									position: 'static'
+								});
+								plus.webview.currentWebview().append(player);
+							}
+						 } );
+					});
 				}
 			}
 		</script>
