@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #myCanvas{background-color:#000;}
+    </style>
+</head>
+<body>
+    <h1></h1>
+    <button class="btnClear">擦除</button><br/>
+    <canvas id="myCanvas" width="600" height="300"></canvas>
+    <script>
+        (()=>{
+            let btnClear = document.querySelector('.btnClear');
+            let myCanvas = document.querySelector('#myCanvas');
+            
+            let ctx = myCanvas.getContext('2d');
+            console.log(ctx)
+
+            // 填充样式
+            ctx.fillStyle = '#58bc58';
+
+            // 线宽
+            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#f90'
+
+
+            // 移动画笔到某个点
+            ctx.moveTo(10,20);
+            ctx.lineTo(100,20);
+            ctx.lineTo(100,100);
+            ctx.lineTo(10,100);
+            ctx.lineTo(10,20);
+
+
+            ctx.moveTo(100,100);
+            ctx.lineTo(200,200);
+
+            // 描边
+            ctx.stroke();
+            ctx.fill();
+
+            // 矩形
+            ctx.beginPath();
+            ctx.strokeStyle = '#f00'
+            
+            ctx.rect(200,20,100,100);
+
+            ctx.stroke();
+
+            // 画圆
+            ctx.beginPath();
+            ctx.strokeStyle = '#f0f';
+            // 弧度与角度的转换公式
+            // 公式：rad = deg*Math.PI/180;
+            ctx.arc(myCanvas.offsetWidth/2,myCanvas.offsetHeight/2,100,0,Math.PI,false);
+
+            ctx.stroke();
+
+
+            // 点击按钮擦除
+            btnClear.onclick = ()=>{
+                // ctx.clearRect(0,0,myCanvas.offsetWidth,myCanvas.offsetHeight);
+                myCanvas.setAttribute('width',myCanvas.offsetWidth);
+                
+            }
+        })()
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=aTGUPBjd9jDtkQlo5b1HWRfI9Qd17QvC"></script>
+		<style type="text/css">
+			/*
+				vh/vw:把设备高度分成100份
+			*/
+			html,body{height:100vh;}
+			body{margin:0;}
+			#bdmap{width: 100%;height:100vh;}
+		</style>
+	</head>
+	<body>
+		<div id="bdmap"></div>
+		<script src="../js/mui.min.js"></script>
+		<script>
+			mui.init();
+			// 创建百度地图实例
+			var map = new BMap.Map("bdmap");
+			
+			document.addEventListener( "plusready", onPlusReady, false );
+			
+			function onPlusReady(){
+				plus.geolocation.getCurrentPosition(position =>{
+						// position :设备的地理位置信息
+						console.log(position);
+						
+						let {longitude,latitude} = position.coords
+						
+							//地址:${position.addresses}
+							//经纬度：${position.coords.longitude}/${position.coords.latitude}
+						// 初始化地图,设置中心点坐标和地图级别
+						map.centerAndZoom(new BMap.Point(longitude, latitude), 20);
+						map.enableScrollWheelZoom(true);
+						
+						// 控件s
+						setTimeout(()=>{console.log(666)
+							var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+							var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+							var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+							map.addControl(top_left_control);        
+							map.addControl(top_left_navigation);     
+							map.addControl(top_right_navigation); 
+						},1000)
+						 
+					})
+				
+				 
+			}
+		</script>
+	</body>
+</html>

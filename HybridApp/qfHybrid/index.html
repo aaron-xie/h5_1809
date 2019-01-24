@@ -44,15 +44,32 @@
 		</li>
 		<li class="mui-table-view-cell">
 			<a class="mui-navigate-right" id="btnPosition">
-				<span class="mui-media-object mui-pull-left mui-icon mui-icon-image"></span>
+				<span class="mui-media-object mui-pull-left mui-icon mui-icon-map"></span>
 				<div class="mui-media-body">
-				    位置信息2
+				    位置信息
 				    <p class='mui-ellipsis'>查看当前位置信息</p>
 				</div>
 			</a>
 		</li>
+		<li class="mui-table-view-cell">
+			<a class="mui-navigate-right" id="btnShare">
+				<span class="mui-media-object mui-pull-left mui-icon mui-icon-pengyouquan"></span>
+				<div class="mui-media-body">
+				    分享
+				    <p class='mui-ellipsis'>微信、QQ、新浪微博等</p>
+				</div>
+			</a>
+		</li>
+		<li class="mui-table-view-cell">
+		    <a class="mui-navigate-right" id="btnPayment">
+		        <span class="mui-media-object mui-pull-left mui-icon mui-icon-image"></span>
+		        <div class="mui-media-body">
+		            支付
+		            <p class='mui-ellipsis'>支付宝、微信支付功能</p>
+		        </div>
+		    </a>
+		</li>
 	</ul>
-	<div class="myAddress">xxx</div>
 	<script>
 		/*
 			HTML5+ API所有接口暴露在window.plus对象下
@@ -76,24 +93,134 @@
 			
 			// 语音输入
 			document.querySelector('#btnSpeech').onclick = ()=>{console.log('speech start')
-				plus.speech.startRecognize( {engine:'iFly'}, (text)=>{
-					alert(text)
+				plus.speech.startRecognize( {engine:'iFly',lang:'zh-cantonese'}, (text)=>{
+					console.log(text)
 				}, ()=>{
 					alert('fail')
 				} );
 			}
 			
-			let add = document.querySelector('.myAddress');
+			// 位置与地图
 			document.querySelector('#btnPosition').onclick = ()=>{
-				plus.geolocation.getCurrentPosition(position =>{
-					// position :设备的地理位置信息
-					alert(JSON.stringify(position));
+				plus.webview.open('html/map.html','page_map')
+			}
+			
+			document.querySelector('#btnShare').onclick = ()=>{
+// 				plus.nativeUI.alert('hello my name is laoxie', ()=>{
+// 					console.log(666)
+// 				}, '提示', '好的');
+
+				plus.share.getServices((services)=>{
+					console.log(services);
+					let buttons = services.map(item=>({title:item.description}));
 					
-					add.innerHTML = `
-						<p>地址:${position.addresses}</p>,
-						<p>经纬度：${position.coords.longitude}/${position.coords.latitude}</p>
-					`
-				})
+					plus.nativeUI.actionSheet({
+						title:'内容分享',
+						cancel:'关闭',
+						buttons
+					}, (e)=>{
+						console.log(e.index);
+						if(e.index>0){
+							let current = services[e.index-1];
+							if(current.authenticated){
+								current.send({content:'告诉大家一个好消息，我们要放假了'}, ()=>{
+									console.log('分享成功')
+								}, (err)=>{
+									console.log('分享失败',e)
+									plus.nativeUI.toast('分享失败');
+								});
+							}else{
+								plus.nativeUI.alert(`${current.description}未授权,无法分享`);
+							}
+							
+							
+						}
+					});
+				});
+				
+			}
+		
+			// 支付/
+			
+			//后台支付接口
+			var pay_url = 'http://demo.dcloud.net.cn/payment/?payid=';
+			document.querySelector('#btnPayment').onclick = function () {
+				// 获取支付通道
+				plus.payment.getChannels(channels => {
+				    console.log('chennels:', channels)
+					
+					// 生成菜单
+					 let actionbuttons = channels.map(channel => ({
+					    title: channel.description
+					}))
+					plus.nativeUI.actionSheet(
+					    {
+					        title: "选择支付方式",
+					        cancel: "取消",
+					        buttons: actionbuttons,
+					    },
+					    function (e) {
+							console.log(e.index);
+							
+							// 点击支付方式时执行的效果
+							if (e.index > 0) {
+								// 获取当前支付方式
+							    let pay = channels[e.index - 1];
+							   
+								//拼接支付接口id
+								pay_url += pay.id;
+								
+								// 判断当前支付服务是否可用
+								if (pay.serviceReady) {
+									// 获取应用程序id
+									var appid = plus.runtime.appid;
+									if (navigator.userAgent.indexOf('StreamApp') >= 0) {
+									    appid = 'Stream';
+									}
+									
+									let amount = Math.random().toFixed(2);
+									
+									//拼接appid与金额
+									pay_url += '&appid=' + appid + '&total='+amount;
+									
+									// 发起请求
+									var xhr = new XMLHttpRequest();
+									xhr.onload = function () {
+									    if (xhr.status == 200) {
+									        console.log('----- 请求订单成功 -----');
+									        console.log(xhr.responseText);
+									        var order = xhr.responseText;
+											
+											// 进入支付页面
+									        plus.payment.request(pay, order, function (result) {
+									            console.log('----- 支付成功 -----');
+									            console.log(result);
+									            plus.nativeUI.alert('支付成功：感谢你的支持，我们会继续努力完善产品。', function () {
+									                back();
+									            }, '捐赠');
+									        }, function (e) {
+									            console.log('----- 支付失败 -----');
+									            console.log('[' + e.code + ']：' + e.message);
+									            plus.nativeUI.alert(
+									                '更多错误信息请参考支付(Payment)规范文档：http://www.html5plus.org/#specification#/specification/Payment.html',
+									                null, '支付失败：' + e.code);
+									        });
+									
+									    } else {
+									        console.log('----- 请求订单失败 -----');
+									        console.log(xhr.status);
+									        plus.nativeUI.alert('获取订单信息失败！', null, '捐赠');
+									    }
+									}
+									xhr.open('GET', pay_url, true);
+									xhr.send();
+									console.log('请求支付订单：' + pay_url);
+									
+								}
+						}
+						}
+					)
+				});
 			}
 		}
 		
