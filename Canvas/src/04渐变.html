@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>04渐变</title>
+</head>
+<body>
+    <h1>04渐变</h1>
+    <canvas id="myCanvas"></canvas>
+    <script>
+    (()=>{
+        /**
+            线性渐变：ctx.createLinearGradient(x0,y0,x1,y1); 参数：x0,y0起始坐标，x1,y1结束坐标
+                addColorStop(stop,color)
+                    * stop：介于 0.0 与 1.0 之间的值，表示渐变中开始与结束之间的位置
+                    * color：颜色值
+
+            径向渐变: ctx.createRadialGradient(x0,y0,r0,x1,y1,r1);
+
+                * x0: 渐变的开始圆的 x 坐标
+                * y0: 渐变的开始圆的 y 坐标
+                * r0: 开始圆的半径
+                * x1: 渐变的结束圆的 x 坐标
+                * y1: 渐变的结束圆的 y 坐标
+                * r1: 结束圆的半径
+        */
+        let myCanvas = document.querySelector('#myCanvas');
+        myCanvas.width = 600;
+        myCanvas.height = 400;
+        myCanvas.style.border = '5px solid #ddd';
+
+        // 获取context
+        let ctx = myCanvas.getContext('2d');
+
+        let lg = ctx.createLinearGradient(0,0,0,500);
+        lg.addColorStop(0,'#58bc58');
+        lg.addColorStop(0.5,'#58bc58');
+        lg.addColorStop(1,'#f00');
+        ctx.fillStyle = lg
+        ctx.fillRect(0, 0, myCanvas.width, myCanvas.height);
+
+        // 镜像渐变
+        let rg = ctx.createRadialGradient(myCanvas.width/2,myCanvas.height/2,50,60,60,50);
+        rg.addColorStop(0, '#000');
+        rg.addColorStop(.4, '#efefef');
+        rg.addColorStop(1, '#fff');
+
+        ctx.beginPath();
+        ctx.fillStyle = rg;
+        ctx.arc(myCanvas.width/2,myCanvas.height/2,50,0,2*Math.PI,true)
+        console.log(ctx)
+        ctx.fill();
+
+        
+    })();
+    </script>
+</body>
+</html>

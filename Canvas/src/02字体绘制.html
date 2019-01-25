@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>字体的绘制</title>
+</head>
+<body>
+    <h1>字体的绘制</h1>
+    <canvas id="myCanvas"></canvas>
+    <script>
+    (()=>{
+        /**
+            * fillText(text,x,y) 填充字体
+            * strokeText(text,x,y) 描边字体
+            * measureText(text,x,y) 检测字体宽度,返回包含指定文本宽度的对象
+                * text:文本
+                * x,y：绘制文字起始坐标
+        */
+        let myCanvas = document.querySelector('#myCanvas');
+        myCanvas.width = 600;
+        myCanvas.height = 300;
+        myCanvas.style.border = '5px solid #ddd';
+
+        // 获取context
+        let ctx = myCanvas.getContext('2d');
+
+        console.log(ctx);
+
+        // 设置字体属性font：与css一致
+        ctx.font = 'italic bold 20px 微软雅黑';
+        ctx.fillText('Html5 1809牛人多',myCanvas.width-ctx.measureText('Html5 1809牛人多',0,0).width-20,20);
+        ctx.strokeText('Html5 1809牛人多',20,60);
+
+        console.log(ctx.measureText('Html5 1809牛人多',0,0))
+
+
+    })();
+    </script>
+</body>
+</html>

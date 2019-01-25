@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>绘制帧动画</title>
+	
+</head>
+<body>
+	<canvas id="myCanvas">
+		你的浏览器不支持canvas，请升级你的浏览器版本
+	</canvas>
+	<p>
+		<button id="btnRotate">转动</button>
+		<button id="btnSpeed">加速</button>
+		<button id="btnStop">停止</button>
+	</p>
+
+	<script>
+		/*
+			1)基本绘制图片的方式
+				ctx.drawImage(img,x,y);
+				参数：
+					img: 是绘制图片的dom对象，
+					x,y: 绘制图片左上角的坐标 。
+			2)在画布上绘制图像，并规定图像的宽度和高度
+				ctx.drawImage(img,x,y,width,height);   
+				参数：
+					width 绘制图片的宽度， 
+					height：绘制图片的高度
+
+				如果指定宽高，最好成比例，不然图片会被拉伸
+				等比公式： height = 原高度*width/原宽度;
+			3)图片裁剪，并把裁剪完成后的那部分图片绘制到画布上
+				ctx.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+				参数：
+					sx,sy 裁剪的左上角坐标，
+					swidth：裁剪图片的高度。
+					sheight:裁剪的高度	
+		 */
+		document.onreadystatechange = function(){
+			if(document.readyState === 'complete'){
+				var canvas = document.querySelector('#myCanvas');
+				canvas.width = canvas.height = 300;
+				canvas.style.border = '5px solid #ccc';
+
+				var ctx = canvas.getContext('2d');
+
+				// 创建图片，用于渲染到canvas
+				var img = new Image();
+				img.src = 'img/gameImgs/TANK-G14D.png'
+
+				// 一张图片分成几张小图
+				let defen = 4;
+				// 动画帧：水平方向索引值
+				var index=0;
+
+				// 人物方向：垂直方向
+				var direction = 0;
+
+				// 速度
+				speed = 6;
+
+				let x=0,y=50;
+
+				let render = function(){
+					// 获取没块图片的宽高（等分图片）
+					var trimWidth = img.width/defen;
+					var trimHeight = img.height/defen;
+
+					setTimeout(function timerFun(){
+						var trimX = index*trimWidth;//0,40,80,120
+						var trimY = direction*trimHeight;//0,0
+
+						// 绘制图片之前先清除之前的绘制
+						ctx.clearRect(0,0,canvas.width,canvas.height);
+
+						// 剪裁部分图片并绘制到画布
+						x++;
+						ctx.drawImage(img,trimX,trimY,trimWidth,trimHeight,x,y,trimWidth,trimHeight);
+
+						// // 在画布上显示速度
+						var speedTxt = '当前速度：' + speed;
+						ctx.textBaseline = 'top';
+						ctx.fillText(speedTxt,canvas.width-ctx.measureText(speedTxt).width-10,10);
+
+						// 更新动画帧，以便下一次绘制
+						index++;
+						index %=defen;
+						canvas.moveTimer = setTimeout(timerFun,1000/speed);
+
+					},1000/speed);
+				}
+
+				img.onload = render;
+
+				var btnRotate = document.querySelector('#btnRotate');
+				var btnStop = document.querySelector('#btnStop');
+				var btnSpeed = document.querySelector('#btnSpeed');
+
+				// 改变方向
+				btnRotate.onclick = function(){
+					direction++;
+					direction %= defen;
+				}
+
+				// 暂停
+				btnStop.onclick = function(){
+					if(canvas.moveTimer){
+						clearTimeout(canvas.moveTimer);
+						canvas.moveTimer = null;
+						this.innerHTML = '重新开始';
+					}else{
+						// window.location.reload();
+						render()
+					}
+				}
+
+				// 改变速度
+				var _speed = 1;
+				btnSpeed.onclick = function(){
+					speed += _speed;
+					if(speed>=20){
+						this.innerHTML = '减速';
+						_speed *= -1;
+					}else if(speed<=1){
+						this.innerHTML = '加速';
+						_speed *= -1;
+					}
+				}
+			}
+		}
+	</script>
+</body>
+</html>

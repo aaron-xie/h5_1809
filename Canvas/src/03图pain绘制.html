@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>图片绘制</title>
+</head>
+<body>
+    <h1>图片绘制</h1>
+    <canvas id="myCanvas"></canvas>
+    <br/>
+    <button id="btnSave">编码转换</button>
+    <button id="btnDownload">保存图片到本地</button>
+    <script>
+    (()=>{
+        /**
+            ctx.drawImage(img,x,y);
+                参数：
+                x,y 绘制图片左上角的坐标，
+                img是绘制图片的dom对象。
+            ctx.drawImage(img,x,y,width,height);   
+                参数：
+                width 绘制图片的宽度， 
+                height：绘制图片的高度
+
+                如果指定宽高，最好成比例，不然图片会被拉伸
+                等比公式： height = 原高度*width/原宽度;
+             ctx.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+                参数：
+                sx,sy 裁剪的左上角坐标，
+                swidth：裁剪图片的宽度。
+                sheight:裁剪的高度
+        */
+        let myCanvas = document.querySelector('#myCanvas');
+        myCanvas.width = 800;
+        myCanvas.height = 400;
+        myCanvas.style.border = '5px solid #ddd';
+
+        // 获取context
+        let ctx = myCanvas.getContext('2d');
+
+        let img = new Image();
+        img.src = 'img/mv3.jpg';
+        img.onload = function(){
+            ctx.drawImage(img,20,20);
+        }
+
+        let img2 = new Image();
+        img2.src = 'img/mv3.jpg';
+        img2.onload = function(){
+            ctx.drawImage(img2,360,20,160,160);
+        }
+
+        let img3 = new Image();
+        img3.src = 'img/mv3.jpg';
+        img3.onload = function(){
+            ctx.drawImage(img2,30,180,160,160,540,20,80,80);
+        }
+
+
+        // 保存画布内容
+        let btnSave = document.getElementById('btnSave');
+        btnSave.onclick = function(){
+            let imgData = myCanvas.toDataURL('image/png');
+            console.log(imgData)
+
+            let newImage = new Image;
+            newImage.src = imgData;
+
+            
+            document.body.appendChild(link)
+        }
+
+        let btnDownload = document.getElementById('btnDownload');
+        btnDownload.onclick = function(){
+            let imgData = myCanvas.toDataURL('image/png');
+            let link = document.createElement('a');
+            link.href = imgData;
+            link.innerText = '下载';
+            link.download = 'meinv.png';
+
+            var event = document.createEvent('MouseEvents');
+            event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            link.dispatchEvent(event);
+
+        }
+    })();
+    </script>
+</body>
+</html>
