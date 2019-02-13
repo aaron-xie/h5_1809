@@ -1,0 +1,15 @@
+{
+	"images" : [
+        {"name" : "fangzi" , "src" : "images/bg1.png"},
+        {"name" : "shu" , "src" : "images/bg2.png"},
+        {"name" : "diban" , "src" : "images/bg3.png"},
+        {"name" : "bird" , "src" : "images/bird.png"},
+        {"name" : "blood" , "src" : "images/blood.png"},
+        {"name" : "die" , "src" : "images/die.png"},
+        {"name" : "gamebegin" , "src" : "images/gamebegin.png"},
+        {"name" : "gameover" , "src" : "images/gameover.png"},
+        {"name" : "number" , "src" : "images/number.png"},
+        {"name" : "pipe0" , "src" : "images/pipe0.png"},
+        {"name" : "pipe1" , "src" : "images/pipe1.png"}
+    ]
+}

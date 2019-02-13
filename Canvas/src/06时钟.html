@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>canvas时钟</title>
+	<style>
+		.clock{border:1px solid #ddd;background-color:#fff;}
+	</style>
+</head>
+<body>
+	<canvas class="clock" width="640" height="480">
+		您的浏览器不支持canvas画布
+    </canvas>
+    <script>
+        var clock = document.querySelector('.clock');
+        var ct = clock.getContext('2d');
+        
+        function clear(){
+            ct.clearRect(0,0,clock.width,clock.height);
+        }
+
+        // 角度
+        let angle = 0;
+
+        function drawClock(){
+            // 先清空画布
+            clear();
+
+            //保存初始状态
+			ct.save();
+
+            //把原点移动到画布中心，并保存状态
+            ct.translate(clock.offsetWidth/2,clock.offsetHeight/2);
+            ct.save();
+
+            // 画外表盘
+            ct.beginPath();
+            ct.lineWidth = 2;
+            ct.arc(0,0,99,0,2*Math.PI,false);
+            ct.stroke();
+
+            // 画内表盘
+            ct.beginPath();
+            ct.lineWidth = 1;
+            ct.arc(0,0,94,0,2*Math.PI,false);
+            ct.stroke();
+
+            // 渐变表盘
+            var g = ct.createRadialGradient(-20,-30,10,-20,-30,50);
+            g.addColorStop(0.1,'rgba(255,255,255,0.5)');
+            g.addColorStop(1,'rgba(215,215,215,0.5)');
+            ct.fillStyle = g;
+            ct.fill();
+
+            // 画表盘刻度线
+            for(var i=0;i<60;i++){
+                // 设置刻度起始位置
+                var start = {x:0,y:-94};
+                var dis;//刻度长度
+                var lineWidth;//刻度宽度
+                // 3，6，9，12
+                if(i%15 == 0){
+                        dis = 8;
+                        lineWidth = 5;
+                }else if(i%5 == 0){
+                        dis = 4;
+                        lineWidth = 3;
+                }else{
+                    dis = 4;
+                    lineWidth = 1;
+                }
+                ct.beginPath();
+                ct.moveTo(start.x,start.y);
+                ct.lineWidth = lineWidth;
+                ct.lineTo(0,start.y+dis);
+                //旋转画布，为了画下一个刻度
+                ct.rotate(6*Math.PI/180);
+                ct.stroke();
+            }
+
+            // 由于画布有旋转，
+            // 需恢复到中心点状态并保存，以便绘制时针
+            ct.restore();
+            ct.save();
+
+
+            // 获取并显示当前时间（数字）
+            var now = new Date();
+            var sec = now.getSeconds();
+            var min = now.getMinutes();
+            var hour = now.getHours();
+            var day = now.getDay();
+            var date = now.getDate();
+
+            ct.textAlign = 'center';
+            ct.font = '14px Arial';
+            // 时间显示补0
+            if(hour < 10) hour = '0' + hour;
+            if(min < 10) min = '0' + min;
+            if(sec < 10) sec = '0' + sec;
+            ct.fillStyle = '#000';
+            ct.fillText(hour + ':' + min + ':' + sec,0,50);
+
+
+            // 时针
+            ct.beginPath();
+            ct.rotate((hour+min/60)*30*Math.PI/180);
+            ct.lineWidth = 4;
+            ct.moveTo(0,0);
+            ct.lineTo(0,-60);
+            ct.stroke();
+            ct.closePath();
+
+            // 恢复之前状态并保存，以便绘制分针
+            ct.restore();
+            ct.save();
+
+            // 分针
+            ct.lineWidth = 2;
+            ct.rotate((min+sec/60)*6*Math.PI/180);
+            ct.beginPath();
+            ct.moveTo(0,0);
+            ct.lineTo(0,-70);
+            ct.stroke();
+            ct.closePath();
+
+
+            // 恢复之前状态并保存，以便绘制秒针
+            ct.restore();
+            ct.save();
+
+            // 秒针
+            ct.lineWidth = 1;
+            ct.rotate(sec*6*Math.PI/180);
+            ct.beginPath();
+            ct.moveTo(0,0);
+            ct.lineTo(0,-80);
+            ct.stroke();
+            ct.closePath();
+
+            // 恢复中心点状态
+            ct.restore();
+
+            // 星期
+            var str_day = ['sun','mon','tue','wed','thur','fri','sat']
+            ct.strokeStyle = '#333';
+            ct.font = '9px 微软雅黑,Gill Sans MT Condensed';
+            ct.strokeRect(38,-7,32,14);
+            ct.fillText(str_day[day],40,4);
+            ct.fillStyle = '#c00';
+            ct.fillText(date,59,4);
+            
+            // 恢复初始状态	
+			ct.restore();
+        }
+
+        // 时钟走动
+        drawClock();
+        setInterval(drawClock,1000);
+
+    </script>
+</body>
+
+</html>
