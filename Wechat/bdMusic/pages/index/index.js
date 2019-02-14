@@ -1,18 +1,28 @@
 //index.js
 //获取应用实例
-const app = getApp()
+const app = getApp();
+const page = getCurrentPages();
+console.log(app, page)
 
 Page({
   data: {
     motto: 'Hello World',
     userInfo: {},
     hasUserInfo: false,
-    canIUse: wx.canIUse('button.open-type.getUserInfo')
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    username:app.globalData.username
   },
   //事件处理函数
   bindViewTap: function() {
     wx.reLaunch({
       url: '../list/list'
+    })
+  },
+
+  //编程式导航跳转
+  handlerGo(e){
+    wx.switchTab({
+      url: '/pages/list/list',
     })
   },
   onLoad: function () {
@@ -41,6 +51,35 @@ Page({
           })
         }
       })
+    }
+  },
+  onShow(){
+    console.log('page onShow')
+  },
+  onReady() {
+    console.log('page onReady')
+  },
+  onHide() {
+    console.log('page onHide')
+  },
+  onUnload() {
+    console.log('page onUnload')
+  }, 
+  onPullDownRefresh() {
+    console.log('page onPullDownRefresh')
+  },
+  onReachBottom() {
+    console.log('page onReachBottom')
+  },
+  onPageScroll(obj) {
+    //console.log('page onPageScroll',obj.scrollTop)
+  },
+  onShareAppMessage(){
+    console.log('page onShareAppMessage');
+    return {
+      title:'今天是个特殊的日子，终于熬到初十了',
+      path:'/pages/index/index',
+      imageUrl:'/img/g3.jpg'
     }
   },
   getUserInfo: function(e) {

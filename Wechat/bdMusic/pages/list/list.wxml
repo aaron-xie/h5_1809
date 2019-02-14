@@ -1,2 +1,5 @@
-<!--pages/list/list.wxml-->
-<text>pages/list/list.wxml</text>
+<view>
+  <view wx:for="{{datalist}}" wx:key="*this" wx:for-item="it" wx:for-index="idx">
+  {{idx+1}} - {{it.title}}
+  </view>
+</view>

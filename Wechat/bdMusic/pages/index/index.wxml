@@ -8,6 +8,9 @@
     </block>
   </view>
   <view class="usermotto">
+    <text>{{username}}</text>
     <text class="user-motto">{{motto}}</text>
   </view>
+  <navigator url='/pages/list/list' open-type='switchTab'>播放器</navigator>
+  <button bindtap="handlerGo" id="btnGo" data-idx="10" data-user-name="laoxie">编程式导航</button>
 </view>

@@ -1,0 +1,5 @@
+<!--pages/player/player.wxml-->
+<text>pages/player/player.wxml</text>
+<view>
+  <text>播放器</text>
+</view>

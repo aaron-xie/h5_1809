@@ -1,11 +1,11 @@
-// pages/list/list.js
+// pages/player/player.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    datalist:[]
+
   },
 
   /**
@@ -19,25 +19,7 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    //参数：//method=baidu.ting.billboard.billList&type=1&size=10&offset=0
-    wx.request({
-      url: 'http://tingapi.ting.baidu.com/v1/restserver/ting',
-      data:{
-        method:'baidu.ting.billboard.billList',
-        type:1,
-        size:10,
-        offset:0
-      },
-      success:(res)=>{
-        let data = res.data;
-        console.log(data);
 
-        // 设置数据到data
-        this.setData({
-          datalist:data.song_list
-        })
-      }
-    })
   },
 
   /**
