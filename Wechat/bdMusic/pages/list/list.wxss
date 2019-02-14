@@ -1,1 +1,6 @@
 /* pages/list/list.wxss */
+.box{
+  width:750rpx;
+  height:50px;
+  background-color:#f00;
+}

@@ -1,0 +1,5 @@
+<view>
+  <text>自定义组件{{username}}</text>
+  <slot></slot>
+  <text>{{age}}</text>
+</view>

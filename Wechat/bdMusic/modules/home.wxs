@@ -1,0 +1,14 @@
+var com =  require('./common.wxs');
+console.log('com',com.username);
+
+var foo = "'hello world' from tools.wxs";
+var bar = function (d) {
+  return d;
+}
+
+
+module.exports = {
+  foo: foo,
+  bar:bar
+}
+module.exports.msg = "some msg";

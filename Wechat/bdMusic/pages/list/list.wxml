@@ -1,5 +1,19 @@
-<view>
-  <view wx:for="{{datalist}}" wx:key="*this" wx:for-item="it" wx:for-index="idx">
-  {{idx+1}} - {{it.title}}
+<view class="weui-panel weui-panel_access">
+  <view class="weui-panel__bd">
+    <navigator url="" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" wx:for="{{datalist}}" wx:key="song_id">
+      <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+        <image class="weui-media-box__thumb" src="{{item.pic_small}}" />
+      </view>
+      <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+        <view class="weui-media-box__title">{{item.title}}</view>
+        <view class="weui-media-box__desc">歌手：{{item.author}}</view>
+      </view>
+    </navigator>
+  </view>
+  <view class="weui-panel__ft">
+    <view class="weui-cell weui-cell_access weui-cell_link">
+      <view class="weui-cell__bd">查看更多</view>
+      <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+    </view>
   </view>
 </view>

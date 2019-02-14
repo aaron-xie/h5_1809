@@ -1,16 +1,20 @@
-<!--index.wxml-->
-<view class="container">
-  <view class="userinfo">
-    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
-    <block wx:else>
-      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" mode="cover"></image>
-      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
-    </block>
+<view>
+  <!-- 轮播图 -->
+  <swiper indicator-dots indicator-color="#58bc58" indicator-active-color="#f90" autoplay>
+    <swiper-item wx:for="{{recommend}}" wx:key="song_id">
+      <image src="{{item.pic_big}}" class="slide-image" height="150" />
+    </swiper-item>
+  </swiper>
+
+  <!-- 搜索 -->
+  <view class="weui-search-bar__form" bindtap="gotoSearch">
+    <view class="weui-search-bar__box">
+      <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+      <input type="text" class="weui-search-bar__input" placeholder="搜索" value="{{keyword}}" />
+    </view>
+    <label class="weui-search-bar__label">
+      <icon class="weui-icon-search" type="search" size="14"></icon>
+      <view class="weui-search-bar__text">{{keyword}}</view>
+    </label>
   </view>
-  <view class="usermotto">
-    <text>{{username}}</text>
-    <text class="user-motto">{{motto}}</text>
-  </view>
-  <navigator url='/pages/list/list' open-type='switchTab'>播放器</navigator>
-  <button bindtap="handlerGo" id="btnGo" data-idx="10" data-user-name="laoxie">编程式导航</button>
 </view>
