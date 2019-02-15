@@ -14,21 +14,5 @@
     "navigationStyle": "default",
     "backgroundColor": "#f00",
     "enablePullDownRefresh": true
-  },
-  "tabBar": {
-    "backgroundColor": "#58bc58",
-    "selectedColor": "#ff0",
-    "color": "#fff",
-    "position": "top",
-    "list": [
-      {
-        "pagePath": "pages/index/index",
-        "text": "首页"
-      },
-      {
-        "pagePath": "pages/list/list",
-        "text": "列表"
-      }
-    ]
   }
 }

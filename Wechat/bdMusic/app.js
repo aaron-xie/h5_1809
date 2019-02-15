@@ -1,6 +1,6 @@
 //app.js
 App({
-  onLaunch: function () {
+  onLaunch: function() {
     console.log('onLaunch')
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
@@ -34,11 +34,38 @@ App({
       }
     })
   },
-  onShow(){
+  onShow() {
     console.log('onShow')
   },
-  onHide(){
+  onHide() {
     console.log('onHide')
+  },
+  getData({ url = 'http://tingapi.ting.baidu.com/v1/restserver/ting',data={}}) {
+    let opt = {
+      url,
+      data: {
+        method: 'baidu.ting.billboard.billList',
+        type:1,
+        size:10,
+        offset:0,
+        ...data
+      }
+    }
+
+    return new Promise((resolve,reject)=>{
+      wx.request({
+        url: opt.url,
+        data: opt.data,
+        success: (res) => {
+          let data = res.data;
+          resolve(data)
+        },
+        fail:err=>{
+          reject(err)
+        }
+      })
+    })
+    
   },
   globalData: {
     types: [{
@@ -67,5 +94,5 @@ App({
       title: '经典老歌榜'
     }]
   },
-  
+
 })

@@ -1,5 +1,6 @@
 // pages/search/search.js
 let timer;
+let app = getApp();
 
 Page({
 
@@ -50,24 +51,23 @@ Page({
   },
 
   getData(keyword){
-    wx.request({
-      url: 'http://tingapi.ting.baidu.com/v1/restserver/ting',
+    app.getData({
       data: {
         method: 'baidu.ting.search.catalogSug',
         query: keyword
-      },
-      success: (res) => {
-        let data = res.data.album;
-        console.log(data);
-
-
-
-        // 设置数据到data
-        this.setData({
-          result: data
-        });
       }
+    }).then(data=>{console.log('data:',data)
+      data = data.song;
+      console.log(data);
+
+
+
+      // 设置数据到data
+      this.setData({
+        result: data
+      });
     })
+    
   },
 
   /**

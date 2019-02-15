@@ -1,43 +1,67 @@
 // pages/list/list.js
+let app = getApp();
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    datalist:[]
+    datalist:[],
+    type:null,
+    pageNo:1,
+    size:10,
+    hasMore:true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let type = options.type;//1,2,16
 
+    let current = app.globalData.types.filter(item=>item.type==type)[0];
+    wx.setNavigationBarTitle({
+      title: current.title
+    });
+
+    this.setData({type});
+
+    //参数：//method=baidu.ting.billboard.billList&type=1&size=10&offset=0
+    this.getData({type});
+  },
+
+  getData({ type = this.data.type, size = this.data.size}){
+    let offset = (this.data.pageNo-1)*size;
+    app.getData({
+      data:{
+        type,
+        size,
+        offset
+      }
+    }).then(data=>{
+      if (!data.song_list) {
+        this.setData({
+          hasMore: false
+        })
+        return;
+      }
+
+      // 设置数据到data
+      let datalist = this.data.datalist;
+      datalist = datalist.concat(data.song_list);
+      this.setData({
+        datalist
+      })
+    })
+    
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    //参数：//method=baidu.ting.billboard.billList&type=1&size=10&offset=0
-    wx.request({
-      url: 'http://tingapi.ting.baidu.com/v1/restserver/ting',
-      data:{
-        method:'baidu.ting.billboard.billList',
-        type:1,
-        size:10,
-        offset:0
-      },
-      success:(res)=>{
-        let data = res.data;
-        console.log(data);
-
-        // 设置数据到data
-        this.setData({
-          datalist:data.song_list
-        })
-      }
-    })
+    
   },
 
   /**
@@ -72,7 +96,19 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
+    if(!this.data.hasMore) return;
 
+    let {pageNo,size} = this.data;
+    pageNo++;
+    // 计算offset
+    let offset = (pageNo - 1) * size;
+
+    this.getData({offset});
+
+    // 修改pageNo
+    this.setData({
+      pageNo
+    })
   },
 
   /**

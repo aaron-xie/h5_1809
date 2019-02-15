@@ -1,5 +1,22 @@
 <!--pages/player/player.wxml-->
-<text>pages/player/player.wxml</text>
-<view>
-  <text>播放器</text>
+<view class="player">
+  <image src="{{songinfo.pic_big}}" class="pic"></image>
+  <view style='padding:20rpx'>
+    <audio poster="{{songinfo.pic_big}}" name="{{songinfo.title}}" author="{{songinfo.author}}" src="{{songinfo.file_link}}" id="myAudio" controls></audio>
+    <view class="weui-panel">
+      <view class="weui-panel__hd">歌曲信息</view>
+      <view class="weui-panel__bd">
+        <view class="weui-media-box weui-media-box_text">
+          <view class="weui-media-box__title weui-media-box__title_in-text">{{songinfo.title}}</view>
+          <view class="weui-media-box__desc">{{songinfo.si_proxycompany}}</view>
+          <view class="weui-media-box__info">
+            <view class="weui-media-box__info__meta">歌手：{{songinfo.author}}</view>
+            <view class="weui-media-box__info__meta">时间：</view>
+            <view class="weui-media-box__info__meta weui-media-box__info__meta_extra">其它信息</view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <button class="weui-btn" type="primary" plain="true" bindtap='handleDownload'>歌词下载</button>
+  </view>
 </view>

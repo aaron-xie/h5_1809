@@ -12,7 +12,7 @@
 		"autoAudits": false
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.5.2",
+	"libVersion": "2.6.0",
 	"appid": "wx8cf6111b4ab000f2",
 	"projectname": "bdMusic",
 	"debugOptions": {

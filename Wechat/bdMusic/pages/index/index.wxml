@@ -1,7 +1,7 @@
 <view>
   <!-- 轮播图 -->
   <swiper indicator-dots indicator-color="#58bc58" indicator-active-color="#f90" autoplay>
-    <swiper-item wx:for="{{recommend}}" wx:key="song_id">
+    <swiper-item wx:for="{{recommend}}" wx:key="song_id" data-songid="{{item.song_id}}" bindtap="gotoPlayer">
       <image src="{{item.pic_big}}" class="slide-image" height="150" />
     </swiper-item>
   </swiper>
@@ -17,6 +17,7 @@
       <view class="weui-search-bar__text">{{keyword}}</view>
     </label>
   </view>
+  <!-- tab标签 -->
   <view class="weui-tab">
     <view class="weui-navbar">
       <block wx:for="{{tabs}}" wx:key="*this">
@@ -27,10 +28,10 @@
       <view class="weui-navbar__slider" style="width: {{sliderWidth}}rpx; transform: translateX({{sliderOffset}}rpx); -webkit-transform: translateX({{sliderOffset}}rpx);"></view>
     </view>
     <view class="weui-tab__panel">
-      <view class="weui-tab__content" hidden="{{activeIndex != index}}" wx:for="{{tabsData}}">
+      <view class="weui-tab__content" hidden="{{activeIndex != index}}" wx:for="{{tabsData}}" wx:key="*this">
         <view class="weui-panel weui-panel_access">
           <view class="weui-panel__bd">
-            <navigator url="" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" wx:for="{{item}}" wx:key="song_id" wx:for-item="song" wx:for-index="idx">
+            <navigator url="/pages/player/player?songid={{song.song_id}}" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" wx:for="{{item}}" wx:key="song_id" wx:for-item="song" wx:for-index="idx">
               <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
                 <image class="weui-media-box__thumb" src="{{song.pic_small}}" />
               </view>
@@ -41,7 +42,7 @@
             </navigator>
           </view>
           <view class="weui-panel__ft">
-            <view class="weui-cell weui-cell_access weui-cell_link">
+            <view class="weui-cell weui-cell_access weui-cell_link" bindtap="handleMore" data-index="{{index}}">
               <view class="weui-cell__bd">查看更多</view>
               <view class="weui-cell__ft weui-cell__ft_in-access"></view>
             </view>

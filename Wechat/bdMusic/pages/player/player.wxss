@@ -1,1 +1,3 @@
 /* pages/player/player.wxss */
+.player .pic{width:750rpx}
+.player audio{width:100%;}

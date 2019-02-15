@@ -16,9 +16,9 @@
     <view class="weui-search-bar__cancel-btn" hidden="{{!showInput}}" bindtap="handleHideInput">取消</view>
   </view>
   <view class="weui-cells searchbar-result" wx:if="{{result.length > 0}}">
-    <navigator url="" class="weui-cell" hover-class="weui-cell_active" wx:for="{{result}}" wx:key="albumid">
+    <navigator url="/pages/player/player?songid={{item.songid}}" class="weui-cell" hover-class="weui-cell_active" wx:for="{{result}}" wx:key="albumid">
       <view class="weui-cell__bd">
-        <view class="title">{{item.albumname}}</view>
+        <view class="title">{{item.songname}}</view>
         <text>歌手：{{item.artistname}}</text>
       </view>
     </navigator>

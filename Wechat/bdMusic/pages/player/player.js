@@ -1,18 +1,46 @@
 // pages/player/player.js
+const app = getApp();
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
+    songinfo:{}
+  },
 
+  // 下载歌词
+  handleDownload(){
+    wx.downloadFile({
+      url: this.data.songinfo.lrclink,
+      success:()=>{
+        console.log('success')
+      }
+    })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let {songid} = options;
 
+    // 根据id获取歌曲信息
+    // method=baidu.ting.song.play&songid=877578
+    app.getData({
+      data:{
+        method:'baidu.ting.song.playAAC',
+        songid
+      }
+    }).then(data=>{
+      console.log('歌曲信息：',data)
+      this.setData({
+        songinfo:{
+          ...data.songinfo,
+          ...data.bitrate
+        }
+      })
+    })
   },
 
   /**

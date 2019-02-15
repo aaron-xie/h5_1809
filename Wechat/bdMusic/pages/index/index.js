@@ -19,32 +19,36 @@ Page({
       url: '/pages/search/search?keyword=' + this.data.keyword
     })
   },
+  handleMore(e){
+    //获取传入的索引值
+    let index = e.currentTarget.dataset.index;
+    let type = this.data.tabs[index].type;
+
+    wx.navigateTo({
+      url: '/pages/list/list?type=' + type
+    })
+  },
   onLoad: function() {
-    wx.request({
-      url: 'http://tingapi.ting.baidu.com/v1/restserver/ting',
-      data: {
-        method: 'baidu.ting.billboard.billList',
-        type: 2,
-        size: 10,
-        offset: 0
-      },
-      success: (res) => {
-        let data = res.data.song_list;
-        console.log(data);
-
-        let recommend = data.slice(0, 5);
-
-
-
-        // 获取最热门的歌曲名，并写入搜索框
-        data.sort((a, b) => b.hot - a.hot);
-
-        // 设置数据到data
-        this.setData({
-          recommend,
-          keyword: data[0].title
-        });
+    app.getData({
+      data:{
+        type:2
       }
+    }).then(data=>{
+     data = data.song_list;
+      console.log(data);
+
+      let recommend = data.slice(0, 5);
+
+
+
+      // 获取最热门的歌曲名，并写入搜索框
+      data.sort((a, b) => b.hot - a.hot);
+
+      // 设置数据到data
+      this.setData({
+        recommend,
+        keyword: data[0].title
+      });
     })
 
     // 获取设备信息
@@ -70,6 +74,13 @@ Page({
 
     this.getData(0);
   },
+
+  // 跳转到播放器
+  gotoPlayer(e){
+    wx.navigateTo({
+      url: '/pages/player/player?songid=' + e.currentTarget.dataset.songid
+    })
+  },
   tabClick: function (e) {
     //e.currentTarget.id为索引值
     let idx = e.currentTarget.id
@@ -81,24 +92,20 @@ Page({
     this.getData(idx);
   },
   getData(idx){
-    wx.request({
-      url: 'http://tingapi.ting.baidu.com/v1/restserver/ting',
-      data: {
-        method: 'baidu.ting.billboard.billList',
+    app.getData({
+      data:{
         type: this.data.tabs[idx].type,
         size: 5,
-        offset: 0
-      },
-      success: (res) => {
-        let data = res.data.song_list;
-        let arr = this.data.tabsData;
-        arr[idx] = data;
-
-        this.setData({
-          tabsData: arr
-        })
       }
-    });
+    }).then(data=>{
+      data = data.song_list;
+      let arr = this.data.tabsData;
+      arr[idx] = data;
+
+      this.setData({
+        tabsData: arr
+      })
+    })
   },
   onShow() {
     console.log('page onShow')
