@@ -1,4 +1,6 @@
 // pages/search/search.js
+let timer;
+
 Page({
 
   /**
@@ -7,20 +9,43 @@ Page({
   data: {
     keyword:'',
     result:[],
-    showInput:true
+    showInput:true,//是否显示搜索框
   },
 
-  handlerSearch(e){
+  handlerSearch(e){console.log(e)
     let keyword = e.detail.value;
-    if(keyword.length<=0) return;
-    this.getData(keyword);
+    if(keyword.length<=0) {
+      this.setData({
+        result:[]
+      });
+      return;
+    }
+    this.setData({
+      keyword
+    })
+    clearTimeout(timer)
+    timer = setTimeout(()=>{
+      this.getData(keyword);
+    },500)
+    
+  },
+
+  // 点击搜索按钮
+  handleShowInput(){
+    this.setData({
+      showInput:true
+    })
+  },
+  handleHideInput(){
+    this.setData({
+      showInput: false
+    })
   },
 
   clearInput(){
     this.setData({
       keyword:'',
-      result:[],
-      showInput:true
+      result:[]
     })
   },
 
@@ -39,7 +64,6 @@ Page({
 
         // 设置数据到data
         this.setData({
-          keyword,
           result: data
         });
       }
@@ -52,6 +76,9 @@ Page({
   onLoad: function(options) {
     let {keyword} = options
 
+    this.setData({
+      keyword
+    })
     this.getData(keyword);
   },
 
