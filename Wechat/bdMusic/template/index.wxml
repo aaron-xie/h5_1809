@@ -1,0 +1,29 @@
+<!-- 利用wxs定义全局数据（wxs只能使用相对路径） -->
+<wxs module="common" src="../modules/common.wxs"/>
+
+<template name="more">
+  <view class="weui-panel__ft">
+      <view class="weui-cell weui-cell_access weui-cell_link" bindtap="handleMore" data-index="{{index}}">
+        <view class="weui-cell__bd" wx:if="{{index!=undefined}}">查看更多</view>
+        <view class="weui-cell__bd" wx:if="{{hasMore!=undefined}}">{{hasMore?'加载更多':'我是有底线的'}}</view>
+        <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+      </view>
+    </view>
+</template>
+
+<template name="list">
+  <view class="weui-panel weui-panel_access">
+    <view class="weui-panel__bd">
+      <navigator url="/pages/player/player?songid={{song.song_id}}" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" wx:for="{{datalist}}" wx:key="song_id" wx:for-item="song" wx:for-index="idx">
+        <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+          <image class="weui-media-box__thumb" src="{{song.pic_small}}" />
+        </view>
+        <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+          <view class="weui-media-box__title">{{song.title}}</view>
+          <view class="weui-media-box__desc">歌手：{{song.author}}</view>
+        </view>
+      </navigator>
+    </view>
+    <template is="more" data="{{index,hasMore}}" />
+  </view>
+</template>

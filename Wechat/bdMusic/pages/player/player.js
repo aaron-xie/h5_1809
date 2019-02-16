@@ -6,7 +6,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    songinfo:{}
+    songinfo:{},
+    player:null,
+    paused:true
   },
 
   // 下载歌词
@@ -40,14 +42,44 @@ Page({
           ...data.bitrate
         }
       })
+
+      let player = wx.createInnerAudioContext();
+      player.src = data.bitrate.file_link;
+      // 暂停事件
+      player.onPause(()=>{console.log('paused')
+        this.setData({
+          paused:true
+        })
+      });
+      player.onPlay(() => {console.log('play')
+        this.setData({
+          paused: false
+        })
+      })
+      this.setData({
+        player
+      })
     })
+  },
+
+  play() {
+    console.log(this.data.player)
+    let {player} = this.data;
+    if(player.paused){
+      player.play();
+    }else{
+      player.pause();
+    }
+    
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-
+    //let {songinfo} = this.data;
+    
+    // player.play();
   },
 
   /**
@@ -68,7 +100,7 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
+    this.data.player.destroy()
   },
 
   /**

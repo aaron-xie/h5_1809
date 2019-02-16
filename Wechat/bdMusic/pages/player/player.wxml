@@ -2,7 +2,8 @@
 <view class="player">
   <image src="{{songinfo.pic_big}}" class="pic"></image>
   <view style='padding:20rpx'>
-    <audio poster="{{songinfo.pic_big}}" name="{{songinfo.title}}" author="{{songinfo.author}}" src="{{songinfo.file_link}}" id="myAudio" controls></audio>
+    <!-- <audio poster="{{songinfo.pic_big}}" name="{{songinfo.title}}" author="{{songinfo.author}}" src="{{songinfo.file_link}}" id="myAudio" controls></audio> -->
+    <button bindtap='play'>{{paused?'播放':'暂停'}}</button>
     <view class="weui-panel">
       <view class="weui-panel__hd">歌曲信息</view>
       <view class="weui-panel__bd">

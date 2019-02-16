@@ -1,3 +1,5 @@
+<import src="/template/index.wxml"/>
+
 <view>
   <!-- 轮播图 -->
   <swiper indicator-dots indicator-color="#58bc58" indicator-active-color="#f90" autoplay>
@@ -29,25 +31,7 @@
     </view>
     <view class="weui-tab__panel">
       <view class="weui-tab__content" hidden="{{activeIndex != index}}" wx:for="{{tabsData}}" wx:key="*this">
-        <view class="weui-panel weui-panel_access">
-          <view class="weui-panel__bd">
-            <navigator url="/pages/player/player?songid={{song.song_id}}" class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" wx:for="{{item}}" wx:key="song_id" wx:for-item="song" wx:for-index="idx">
-              <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
-                <image class="weui-media-box__thumb" src="{{song.pic_small}}" />
-              </view>
-              <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
-                <view class="weui-media-box__title">{{song.title}}</view>
-                <view class="weui-media-box__desc">歌手：{{song.author}}</view>
-              </view>
-            </navigator>
-          </view>
-          <view class="weui-panel__ft">
-            <view class="weui-cell weui-cell_access weui-cell_link" bindtap="handleMore" data-index="{{index}}">
-              <view class="weui-cell__bd">查看更多</view>
-              <view class="weui-cell__ft weui-cell__ft_in-access"></view>
-            </view>
-          </view>
-        </view>
+        <template is="list" data="{{datalist:item,index}}"/>
       </view>
     </view>
   </view>
