@@ -40,7 +40,7 @@ App({
   onHide() {
     console.log('onHide')
   },
-  getData({ url = 'http://tingapi.ting.baidu.com/v1/restserver/ting',data={}}) {
+  getData({ url = 'https://tingapi.ting.baidu.com/v1/restserver/ting',data={}}) {
     let opt = {
       url,
       data: {
